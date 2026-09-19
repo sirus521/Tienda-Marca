@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Playera oversize, vista frontal sobre fondo oscuro">
+  <!--
+    Placeholder de producto — fondo oscuro.
+    Se usa como SEGUNDA imagen de cada producto: al pasar el cursor sobre la
+    tarjeta la prenda se invierte (tinta ↔ papel). Es un cambio de contraste,
+    no un efecto de luz.
+  -->
+  <rect width="800" height="1000" fill="#0E0E0C"/>
+  <path fill="#F2F0EB" d="M300 200 L358 191 Q400 234 442 191 L500 200 L704 322 L656 478 L588 436 L612 862 L188 862 L212 436 L144 478 L96 322 Z"/>
+  <path fill="none" stroke="#0E0E0C" stroke-width="9" d="M352 197 Q400 246 448 197"/>
+  <path fill="none" stroke="#0E0E0C" stroke-opacity="0.2" stroke-width="2.5" d="M212 436 L188 862"/>
+</svg>

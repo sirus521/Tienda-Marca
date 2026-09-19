@@ -1,0 +1,299 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   AC — SISTEMA DE DISEÑO
+   --------------------------------------------------------------------------
+   Estética: papel + tinta. Slab serif atlética (eco del logo), monocromo
+   cálido, esquinas duras, estructura de hairline de 1px.
+
+   REGLA DURA: SIN GLOW.
+   La jerarquía visual se construye con tipografía, contraste, escala y
+   movimiento. Nunca con halos de luz, neón, blur radiante ni gradientes
+   luminosos. Las sombras son de elevación neutra y muy contenidas.
+   ========================================================================== */
+
+@theme {
+  /* ---------- Papel (fondos) ---------- */
+  --color-bone: #f2f0eb;
+  --color-bone-2: #e9e6df;
+  --color-bone-3: #dedad1;
+
+  /* ---------- Tinta (negro del logo) ---------- */
+  --color-ink: #0e0e0c;
+  --color-ink-2: #1c1c19;
+  --color-ink-3: #2a2a26;
+
+  /* ---------- Grises ---------- */
+  --color-ash: #6e6e67;
+  --color-ash-2: #9a9a92;
+
+  /* ---------- Bordes (hairlines) ---------- */
+  --color-line: #d6d2c9;
+  --color-line-strong: #b9b4a8;
+  --color-line-ink: #2e2e2a;
+
+  /* ---------- Acento: el bronce del "EST. 2026" ---------- */
+  --color-bronze: #8c7a5b;
+  --color-bronze-2: #a8906a;
+
+  /* ---------- Semánticos ---------- */
+  --color-paper: var(--color-bone);
+  --color-fg: var(--color-ink);
+  --color-muted: var(--color-ash);
+  --color-success: #3f6212;
+  --color-danger: #9a3412;
+
+  /* ---------- Tipografía ---------- */
+  --font-display: var(--font-bevan), "Bevan", Rockwell, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* ---------- Escala tipográfica fluida ----------
+     clamp() elimina la necesidad de media queries para tipografía. */
+  --text-hero: clamp(3.25rem, 15vw, 13rem);
+  --text-hero--line-height: 0.86;
+  --text-hero--letter-spacing: -0.04em;
+  --text-hero--font-weight: 400;
+
+  --text-display: clamp(2.5rem, 8vw, 6rem);
+  --text-display--line-height: 0.92;
+  --text-display--letter-spacing: -0.03em;
+
+  --text-title: clamp(1.875rem, 5vw, 3.75rem);
+  --text-title--line-height: 1;
+  --text-title--letter-spacing: -0.02em;
+
+  --text-heading: clamp(1.375rem, 3vw, 2.25rem);
+  --text-heading--line-height: 1.1;
+  --text-heading--letter-spacing: -0.015em;
+
+  --text-lead: clamp(1.0625rem, 1.5vw, 1.3125rem);
+  --text-lead--line-height: 1.5;
+
+  --text-label: 0.6875rem;
+  --text-label--line-height: 1;
+  --text-label--letter-spacing: 0.18em;
+
+  /* ---------- Esquinas duras ----------
+     Deliberado: nada de pill shapes. Estética editorial y directa. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+
+  /* ---------- Elevación neutra (NO glow) ---------- */
+  --shadow-lift: 0 8px 24px -16px rgb(14 14 12 / 0.28);
+  --shadow-press: 0 2px 6px -3px rgb(14 14 12 / 0.24);
+
+  /* ---------- Easing ---------- */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* ---------- Ritmo vertical ---------- */
+  --spacing-section: clamp(4.5rem, 10vw, 9rem);
+  --spacing-gutter: clamp(1rem, 4vw, 2.5rem);
+
+  /* ---------- Animaciones CSS ---------- */
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 40s linear infinite;
+
+  /* Entrada de contenido. `both` mantiene el estado inicial antes de arrancar
+     y el final después, sin salto. Con movimiento reducido, la media query
+     global la completa al instante en lugar de congelarla — por eso el
+     contenido nunca queda invisible. */
+  --animate-fade-up: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  /* Revelado por máscara: el texto sube desde detrás de su propia línea. */
+  --animate-mask-up: mask-up 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  --animate-fade-in: fade-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes mask-up {
+    from {
+      transform: translate3d(0, 105%, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  @keyframes marquee-reverse {
+    from {
+      transform: translate3d(-100%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
+
+/* ==========================================================================
+   CAPA BASE
+   ========================================================================== */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  /* Accesibilidad: el foco SIEMPRE es visible. No se elimina nunca. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  ::selection {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+  }
+
+  /* Los titulares son slab serif por defecto: la voz del logo. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Evita el desbordamiento por debajo y el layout shift de scrollbar. */
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+/* ==========================================================================
+   UTILIDADES DE MARCA
+   ========================================================================== */
+
+/* Contenedor único de toda la tienda. Ancho máximo + gutters fluidos. */
+@utility container-ac {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Etiqueta pequeña en monoespaciada: "01 / 04", "NUEVO", nombres de sección. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: 500;
+  letter-spacing: var(--text-label--letter-spacing);
+  line-height: var(--text-label--line-height);
+  text-transform: uppercase;
+  color: var(--color-ash);
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     Grano de papel.
+     Textura, NO luz. Aporta el acabado "crudo" del logo sin recurrir a
+     glow ni a gradientes luminosos. Requiere `relative` en el padre.
+     ------------------------------------------------------------------ */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-size: 180px 180px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Subrayado que barre desde la izquierda. Reemplaza al hover luminoso. */
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.45s var(--ease-out-quint);
+  }
+
+  .link-underline:hover::after,
+  .link-underline[data-active="true"]::after {
+    transform: scaleX(1);
+  }
+
+  /* Bloqueo de scroll del documento (drawer de carrito, menú móvil). */
+  .no-scroll {
+    overflow: hidden;
+  }
+}
+
+/* ==========================================================================
+   MOVIMIENTO REDUCIDO
+   Garantía a nivel CSS, independiente de lo que haga JavaScript.
+   Si el sistema pide menos movimiento, se apaga todo.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

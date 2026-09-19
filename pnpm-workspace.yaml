@@ -1,0 +1,65 @@
+# ============================================================================
+# Configuración de pnpm
+# ----------------------------------------------------------------------------
+# IMPORTANTE: desde pnpm 10, casi todos los ajustes viven AQUÍ. `.npmrc` solo
+# se lee para autenticación y registry. El campo `pnpm` de package.json ya no
+# se lee en absoluto (pnpm 11 solo emite un aviso y lo ignora).
+# ============================================================================
+
+packages:
+  - "."
+
+# ----------------------------------------------------------------------------
+# Scripts de construcción de dependencias
+# ----------------------------------------------------------------------------
+# pnpm bloquea por defecto los scripts `postinstall`. Es una defensa real
+# contra ataques de cadena de suministro: un paquete comprometido no puede
+# ejecutar código arbitrario en el momento de instalarse.
+#
+# Pero eso deja sin compilar binarios nativos que este proyecto SÍ necesita.
+# pnpm reportó exactamente estos tres con ERR_PNPM_IGNORED_BUILDS:
+#
+#   workerd        → runtime local de Cloudflare Workers (lo usa `wrangler dev`)
+#   esbuild        → empaquetador (lo usa drizzle-kit y herramientas de build)
+#   unrs-resolver  → resolución de módulos nativa (la usa ESLint)
+#
+# Sin estos tres en `true`, `wrangler dev` y `pnpm lint` fallan con errores
+# confusos del tipo "no se encontró el binario".
+#
+# OJO: `allowBuilds` reemplaza al antiguo `onlyBuiltDependencies`, que ya no
+# se aplica. La forma correcta es un MAPA nombre → booleano, no una lista.
+# Los valores son `true` porque estas tres dependencias son de confianza
+# directa y su compilación es indispensable para el proyecto.
+# ----------------------------------------------------------------------------
+allowBuilds:
+  workerd: true
+  esbuild: true
+  unrs-resolver: true
+
+# ----------------------------------------------------------------------------
+# Red
+# ----------------------------------------------------------------------------
+# El registry público limita la tasa de peticiones. Con los valores por
+# defecto, una instalación grande muere a la mitad con errores de timeout —
+# que es justo lo que ocurrió en el primer intento en esta máquina. Estos
+# ajustes la hacen tolerante: reintenta más, espera más y pide menos archivos
+# en paralelo.
+# ----------------------------------------------------------------------------
+networkConcurrency: 4
+fetchRetries: 5
+fetchRetryFactor: 10
+fetchRetryMintimeout: 20000
+fetchRetryMaxtimeout: 120000
+fetchTimeout: 300000
+
+minimumReleaseAgeExclude:
+  - '@cloudflare/workerd-darwin-64@1.20260918.1'
+  - '@cloudflare/workerd-darwin-arm64@1.20260918.1'
+  - '@cloudflare/workerd-linux-64@1.20260918.1'
+  - '@cloudflare/workerd-linux-arm64@1.20260918.1'
+  - '@cloudflare/workerd-windows-64@1.20260918.1'
+  - '@cloudflare/workers-types@5.20260918.1'
+  - '@types/node@26.6.2'
+  - miniflare@5.20260918.0-alpha
+  - workerd@1.20260918.1
+  - wrangler@4.135.0
