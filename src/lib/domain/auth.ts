@@ -84,11 +84,11 @@ export const SESSION_TTL_HOURS = 12;
 /**
  * Longitud mínima de contraseña.
  *
- * 12 caracteres, no 8. Es la única defensa contra contraseñas tipo
- * `ac-marca-2026`, que es exactamente lo que alguien Pondría en una tienda
+ * 8 caracteres, no 12. Es la única defensa contra contraseñas tipo
+ * `ac-marca-2026`, que es exactamente lo que alguien pondría en una tienda
  * propia donde sabe que nadie más entra.
  */
-export const PASSWORD_MIN_LENGTH = 12;
+export const PASSWORD_MIN_LENGTH = 8;
 
 export const PASSWORD_MAX_LENGTH = 200;
 

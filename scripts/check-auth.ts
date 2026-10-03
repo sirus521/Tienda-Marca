@@ -91,7 +91,7 @@ function checkValidation(): void {
     "rechaza correo sin arroba, con espacio o vacío",
     !isValidEmail("admin@") && !isValidEmail("a b@c.mx") && !isValidEmail(""),
   );
-  check("rechaza contraseña corta", validatePassword("corta123") !== null);
+  check("rechaza contraseña corta", validatePassword("corta12") !== null);
   check("acepta contraseña larga", validatePassword("esta-es-buena-1234") === null);
 }
 

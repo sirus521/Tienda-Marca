@@ -103,7 +103,7 @@ async function askPassword(): Promise<string> {
     _writeToOutput?: (chunk: string) => void;
   };
   const write = output._writeToOutput?.bind(output);
-  const passwordPrompt = "  Contraseña (mínimo 12 caracteres): ";
+  const passwordPrompt = "  Contraseña (mínimo 8 caracteres): ";
   output.output = {
     write(chunk: string) {
       if (chunk.includes(passwordPrompt)) {
