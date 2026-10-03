@@ -66,18 +66,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
-  /*
-   * FASE 4 — al agregar Cloudflare D1 y R2:
-   *
-   *   import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-   *   initOpenNextCloudflareForDev();
-   *
-   * Habilita el acceso a los bindings de Cloudflare desde `next dev`, para
-   * no tener que desplegar solo para probar una consulta. Se activa cuando
-   * exista `wrangler.jsonc`, no antes: sin binding, la llamada solo agrega
-   * ruido al arranque.
-   */
 };
 
 export default nextConfig;

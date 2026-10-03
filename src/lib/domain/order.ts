@@ -3,7 +3,7 @@ import { z } from "zod";
 import { brand } from "@/config/brand";
 import { describeOptions } from "@/lib/domain/cart";
 import { formatMoney, sumCents } from "@/lib/domain/money";
-import type { CartLine, Order, OrderTotals } from "@/lib/domain/types";
+import type { Order, OrderTotals } from "@/lib/domain/types";
 
 /**
  * Pedidos
@@ -60,14 +60,32 @@ export function createFolio(): string {
    ============================================================================ */
 
 /**
+ * Una línea tal y como la necesita el cálculo de totales.
+ *
+ * Deliberadamente más estrecha que `CartLine`: el total sale del precio y la
+ * cantidad, y nada más. Exigir la línea completa obligaría a `order-repository`
+ * a fabricar un `CartLine` —con nombre, SKU y foto— solo para multiplicar dos
+ * números, y a duplicar la regla de totales si no lo hiciera.
+ */
+export type PricedLine = {
+  unitPriceCents: number;
+  quantity: number;
+};
+
+/**
  * Calcula los totales del pedido.
+ *
+ * Es el ÚNICO sitio donde se decide cómo se suma un total. `order-repository`
+ * lo llama en vez de repetir la cuenta: dos lugares con la misma regla son dos
+ * lugares que un día se desincronizan, y el que se queda atrás falla en el
+ * total que se cobra.
  *
  * `shippingCents` se recibe como parámetro y no se deduce aquí a propósito:
  * todavía no hay tarifas de envío definidas, así que quien construye el pedido
  * decide cuánto aplicar (hoy, cero y el envío se acuerda por WhatsApp). Cuando
  * existan las tarifas, este mismo punto de entrada las recibe.
  */
-export function computeTotals(lines: readonly CartLine[], shippingCents = 0): OrderTotals {
+export function computeTotals(lines: readonly PricedLine[], shippingCents = 0): OrderTotals {
   const subtotalCents = sumCents(lines.map((line) => line.unitPriceCents * line.quantity));
   const discountCents = 0;
   const safeShipping = Number.isFinite(shippingCents) ? Math.max(0, Math.round(shippingCents)) : 0;
@@ -243,15 +261,5 @@ export const DELIVERY_LABELS = {
 export function orderWhatsappUrl(order: Order): string {
   return `https://wa.me/${brand.contact.whatsapp}?text=${encodeURIComponent(
     buildWhatsappMessage(order),
-  )}`;
-}
-
-/**
- * Enlace de consulta, sin pedido. Para cuando alguien quiere escribir sin
- * haber armado nada todavía.
- */
-export function whatsappGreetingUrl(): string {
-  return `https://wa.me/${brand.contact.whatsapp}?text=${encodeURIComponent(
-    brand.contact.whatsappGreeting,
   )}`;
 }

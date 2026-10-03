@@ -27,7 +27,12 @@ import { sql } from "drizzle-orm";
    `adminUsers`, `adminAccounts`, `sessionTokens` y `authVerifications`
    siguen el contrato de better-auth (nombres de columna que espera
    `drizzleAdapter`), pero con el plural y el snake_case del proyecto.
-   El mapeo entre ambos mundos va en la configuración de better-auth.
+
+   La librería NO está instalada todavía: no hay panel de administración que
+   las use. Se dejan ahora porque el contrato de columnas es lo caro de decidir
+   —cambiarlas después significa una migración con datos—, y porque saber qué
+   espera el adaptador antes de elegirlo evita una segunda migración. Cuando se
+   añada, el mapeo entre ambos mundos va en su configuración, no aquí.
    ================================================================= */
 
 /* ------------------------------------------------------------------

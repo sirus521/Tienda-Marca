@@ -30,8 +30,13 @@ export const site = {
     "playeras de algodón pesado",
   ],
 
-  /** Rutas que no deben indexarse en buscadores. */
-  noIndexPaths: ["/admin", "/checkout", "/carrito", "/pedido"],
+  /* NO hay lista de rutas que no deben indexarse, y es deliberado: cada página
+     declara su propio `metadata.robots`, que es la vía que Next entiende de
+     forma nativa. Una lista central sería una segunda fuente de verdad que
+     nadie consulta, y la que se queda atrás es la que acaba mandando — el mismo
+     fallo que motivó vaciar `nav.ts` de enlaces a páginas inexistentes.
+     `/carrito` y `/checkout` ya lo hacen; cuando exista `/admin`, repetir el
+     patrón ahí. */
 
   /**
    * Ancho máximo de subida de imagen, en píxeles.

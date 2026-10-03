@@ -2,8 +2,7 @@ import { eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@/lib/db/client";
 import { orderItems, orders, orderStatusHistory, productVariants, products } from "@/lib/db/schema";
-import { createFolio } from "@/lib/domain/order";
-import { sumCents } from "@/lib/domain/money";
+import { createFolio, computeTotals } from "@/lib/domain/order";
 import type { CartLine, Order, OrderCustomer, DeliveryMethod } from "@/lib/domain/types";
 
 /**
@@ -158,14 +157,11 @@ export async function createOrder(
     imageUrl: line.imageUrl,
   }));
 
-  const subtotalCents = sumCents(items.map((item) => item.lineTotalCents));
-  const totals = {
-    subtotalCents,
-    /* El envío todavía no tiene tarifa calculada: se acuerda en el chat. */
-    shippingCents: 0,
-    discountCents: 0,
-    totalCents: subtotalCents,
-  };
+  /* Los totales salen de `computeTotals`, que es el único sitio donde se decide
+     cómo se suma un total. El envío todavía no tiene tarifa calculada —se
+     acuerda en el chat—, y por eso el segundo argumento es 0 explícito y no una
+     regla escondida aquí. */
+  const totals = computeTotals(items);
 
   const now = new Date().toISOString();
   const orderId = crypto.randomUUID();
