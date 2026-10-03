@@ -45,8 +45,7 @@ import type { CartLine, Order, OrderCustomer, DeliveryMethod } from "@/lib/domai
  * cuesta un `Map` y ahorra a la acción una segunda consulta a la base.
  */
 export type CreateOrderResult =
-  | { ok: true; order: Order; productSlugs: string[] }
-  | { ok: false; error: string };
+  { ok: true; order: Order; productSlugs: string[] } | { ok: false; error: string };
 
 /** Cuántos folios se prueban antes de rendirse. */
 const FOLIO_ATTEMPTS = 5;

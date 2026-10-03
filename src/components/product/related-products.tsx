@@ -30,10 +30,7 @@ export function RelatedProducts({ products }: { products: readonly Product[] }) 
             <h2 className="mt-4 text-title">También te puede interesar</h2>
           </div>
 
-          <Link
-            href="/tienda"
-            className={buttonStyles({ variant: "secondary" })}
-          >
+          <Link href="/tienda" className={buttonStyles({ variant: "secondary" })}>
             Ver todo el catálogo
           </Link>
         </div>

@@ -10,7 +10,12 @@ import { Button } from "@/components/ui/button-client";
 import { buttonStyles } from "@/components/ui/button";
 import { RadioOption, TextAreaField, TextField } from "@/components/ui/field";
 import { formatMoney } from "@/lib/domain/money";
-import { cartStore, useCartHasHydrated, useCartLines, useCartSubtotalCents } from "@/lib/stores/cart-store";
+import {
+  cartStore,
+  useCartHasHydrated,
+  useCartLines,
+  useCartSubtotalCents,
+} from "@/lib/stores/cart-store";
 
 /**
  * Formulario de checkout
@@ -115,7 +120,9 @@ export function CheckoutForm() {
       <input
         type="hidden"
         name="lines"
-        value={JSON.stringify(lines.map((line) => ({ variantId: line.variantId, quantity: line.quantity })))}
+        value={JSON.stringify(
+          lines.map((line) => ({ variantId: line.variantId, quantity: line.quantity })),
+        )}
       />
 
       {/* ---------------- Resumen ---------------- */}
@@ -130,7 +137,7 @@ export function CheckoutForm() {
 
         <div className="flex items-baseline justify-between pt-4">
           <span className="font-mono text-label text-ash uppercase">Subtotal</span>
-          <span className="font-mono text-xl tabular-nums text-ink">
+          <span className="font-mono text-xl text-ink tabular-nums">
             {formatMoney(subtotalCents)}
           </span>
         </div>
@@ -175,7 +182,10 @@ export function CheckoutForm() {
         <h2 className="eyebrow">Tus datos</h2>
 
         {state.status === "error" && state.message ? (
-          <p role="alert" className="border border-danger/40 bg-danger/5 px-4 py-3 text-sm text-danger">
+          <p
+            role="alert"
+            className="border border-danger/40 bg-danger/5 px-4 py-3 text-sm text-danger"
+          >
             {state.message}
           </p>
         ) : null}
@@ -221,7 +231,12 @@ export function CheckoutForm() {
             error={fieldError("customer.postalCode")}
           />
 
-          <TextField name="city" label="Ciudad" autoComplete="address-level2" error={fieldError("customer.city")} />
+          <TextField
+            name="city"
+            label="Ciudad"
+            autoComplete="address-level2"
+            error={fieldError("customer.city")}
+          />
 
           <TextField
             name="state"

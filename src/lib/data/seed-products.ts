@@ -158,18 +158,23 @@ const oversizeClasica: Product = (() => {
       { size: "XL", values: { pecho: 63, largo: 74, hombro: 56 } },
     ],
     options: [sizeOption(id, ["S", "M", "L", "XL"]), colorOption(id, colors)],
-    variants: variants(id, "AC-001", [
-      { key: "BR-S", optionValues: { Talla: "S", Color: "Blanco Roto" }, stock: 12 },
-      { key: "BR-M", optionValues: { Talla: "M", Color: "Blanco Roto" }, stock: 18 },
-      { key: "BR-L", optionValues: { Talla: "L", Color: "Blanco Roto" }, stock: 9 },
-      /* Agotada a propósito: el selector de talla debe deshabilitarla. */
-      { key: "BR-XL", optionValues: { Talla: "XL", Color: "Blanco Roto" }, stock: 0 },
-      { key: "NH-S", optionValues: { Talla: "S", Color: "Negro Hueso" }, stock: 7 },
-      { key: "NH-M", optionValues: { Talla: "M", Color: "Negro Hueso" }, stock: 14 },
-      /* Stock bajo: activa el aviso de últimas piezas. */
-      { key: "NH-L", optionValues: { Talla: "L", Color: "Negro Hueso" }, stock: 3 },
-      { key: "NH-XL", optionValues: { Talla: "XL", Color: "Negro Hueso" }, stock: 6 },
-    ], 54_900),
+    variants: variants(
+      id,
+      "AC-001",
+      [
+        { key: "BR-S", optionValues: { Talla: "S", Color: "Blanco Roto" }, stock: 12 },
+        { key: "BR-M", optionValues: { Talla: "M", Color: "Blanco Roto" }, stock: 18 },
+        { key: "BR-L", optionValues: { Talla: "L", Color: "Blanco Roto" }, stock: 9 },
+        /* Agotada a propósito: el selector de talla debe deshabilitarla. */
+        { key: "BR-XL", optionValues: { Talla: "XL", Color: "Blanco Roto" }, stock: 0 },
+        { key: "NH-S", optionValues: { Talla: "S", Color: "Negro Hueso" }, stock: 7 },
+        { key: "NH-M", optionValues: { Talla: "M", Color: "Negro Hueso" }, stock: 14 },
+        /* Stock bajo: activa el aviso de últimas piezas. */
+        { key: "NH-L", optionValues: { Talla: "L", Color: "Negro Hueso" }, stock: 3 },
+        { key: "NH-XL", optionValues: { Talla: "XL", Color: "Negro Hueso" }, stock: 6 },
+      ],
+      54_900,
+    ),
     images: productImages(id, "bone", name),
     seo: {
       title: "Oversize Tee 240 — Clásica | Algodón pesado",

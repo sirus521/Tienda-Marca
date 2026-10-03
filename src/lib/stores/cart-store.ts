@@ -167,9 +167,7 @@ export function useCartLines(): CartLine[] {
 /** Total de piezas. Es el número que muestra la cabecera. */
 export function useCartCount(): number {
   const hydrated = useCartHasHydrated();
-  const count = cartStore((state) =>
-    state.lines.reduce((total, line) => total + line.quantity, 0),
-  );
+  const count = cartStore((state) => state.lines.reduce((total, line) => total + line.quantity, 0));
 
   /* Antes de hidratar devuelve 0 para que servidor y cliente coincidan. */
   return hydrated ? count : 0;

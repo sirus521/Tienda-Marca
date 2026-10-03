@@ -38,24 +38,24 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="container-ac relative z-10 flex min-h-[88svh] flex-col justify-between py-section lg:py-[clamp(6rem,12vw,11rem)] lg:min-h-[92svh]">
+      <div className="relative z-10 container-ac flex min-h-[88svh] flex-col justify-between py-section lg:min-h-[92svh] lg:py-[clamp(6rem,12vw,11rem)]">
         {/* ---------------- Bloque principal ---------------- */}
         <div className="max-w-5xl">
-          <p className="eyebrow animate-fade-up">
+          <p className="animate-fade-up eyebrow">
             {establishedLabel} · {brand.contact.location.split(",")[0] ?? "México"}
           </p>
 
           <h1 className="mt-7">
-            <span className="animate-fade-up block font-display text-display [animation-delay:80ms]">
+            <span className="block animate-fade-up font-display text-display [animation-delay:80ms]">
               Playeras
             </span>
             {/* La palabra clave va al tamaño máximo: aquí está el golpe visual. */}
             <span className="block overflow-hidden">
-              <span className="animate-mask-up block font-display text-hero text-ink [animation-delay:160ms]">
+              <span className="block animate-mask-up font-display text-hero text-ink [animation-delay:160ms]">
                 OVERSIZE
               </span>
             </span>
-            <span className="animate-fade-up block font-display text-display [animation-delay:320ms]">
+            <span className="block animate-fade-up font-display text-display [animation-delay:320ms]">
               de peso pesado
             </span>
           </h1>
@@ -63,11 +63,11 @@ export function Hero() {
 
         {/* ---------------- Cierre del hero ---------------- */}
         <div className="mt-10 flex flex-col gap-8 lg:mt-14 lg:flex-row lg:items-start lg:justify-between">
-          <p className="animate-fade-up max-w-md text-lead text-ash [animation-delay:420ms]">
+          <p className="max-w-md animate-fade-up text-lead text-ash [animation-delay:420ms]">
             {brand.identity.description}
           </p>
 
-          <div className="animate-fade-up flex flex-wrap items-center gap-3 [animation-delay:520ms]">
+          <div className="flex animate-fade-up flex-wrap items-center gap-3 [animation-delay:520ms]">
             <Link href="/tienda" className={buttonStyles({ variant: "primary", size: "lg" })}>
               Ver la tienda
             </Link>

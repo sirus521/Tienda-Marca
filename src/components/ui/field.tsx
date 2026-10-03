@@ -61,7 +61,10 @@ export function TextField({
 }: FieldProps & NamedProps & InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={fieldId(name)} className="font-mono text-xs tracking-[0.14em] text-ash uppercase">
+      <label
+        htmlFor={fieldId(name)}
+        className="font-mono text-xs tracking-[0.14em] text-ash uppercase"
+      >
         {label}
         {required ? <span className="ml-1 text-danger">*</span> : null}
       </label>
@@ -97,7 +100,10 @@ export function TextAreaField({
 }: FieldProps & NamedProps & TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={fieldId(name)} className="font-mono text-xs tracking-[0.14em] text-ash uppercase">
+      <label
+        htmlFor={fieldId(name)}
+        className="font-mono text-xs tracking-[0.14em] text-ash uppercase"
+      >
         {label}
         {required ? <span className="ml-1 text-danger">*</span> : null}
       </label>
@@ -123,15 +129,7 @@ export function TextAreaField({
   );
 }
 
-function FieldMessages({
-  name,
-  hint,
-  error,
-}: {
-  name: string;
-  hint?: string;
-  error?: string;
-}) {
+function FieldMessages({ name, hint, error }: { name: string; hint?: string; error?: string }) {
   return (
     <>
       {hint ? (

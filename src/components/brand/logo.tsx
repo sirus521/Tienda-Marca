@@ -21,7 +21,12 @@ type LogoProps = {
  * El bronce es el único acento cromático de toda la identidad: se usa aquí
  * y en casi ningún otro lugar, para que conserve su peso.
  */
-export function Logo({ variant = "monogram", size = 32, className, decorative = false }: LogoProps) {
+export function Logo({
+  variant = "monogram",
+  size = 32,
+  className,
+  decorative = false,
+}: LogoProps) {
   const isLockup = variant === "lockup";
 
   return (
@@ -58,10 +63,7 @@ export function Logo({ variant = "monogram", size = 32, className, decorative = 
 export function LogoBadge({ className }: { className?: string }) {
   return (
     <span
-      className={cn(
-        "inline-flex size-10 items-center justify-center bg-ink text-bone",
-        className,
-      )}
+      className={cn("inline-flex size-10 items-center justify-center bg-ink text-bone", className)}
     >
       <LogoMark className="w-6 text-bone" />
     </span>

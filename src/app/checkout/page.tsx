@@ -32,8 +32,8 @@ export default function CheckoutPage() {
         <span className="eyebrow">Último paso</span>
         <h1 className="mt-5 text-display">Confirmar pedido</h1>
         <p className="mt-6 max-w-lg text-lead text-ash">
-          Registramos tu pedido y te damos el acceso directo a WhatsApp con el detalle para confirmar
-          disponibilidad, envío y forma de pago. Aquí no se cobra nada.
+          Registramos tu pedido y te damos el acceso directo a WhatsApp con el detalle para
+          confirmar disponibilidad, envío y forma de pago. Aquí no se cobra nada.
         </p>
       </header>
 

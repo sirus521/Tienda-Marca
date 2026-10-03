@@ -73,7 +73,7 @@ export function ProductFilters({
         {/* ---------------- Talla ---------------- */}
         {availableSizes.length > 1 ? (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="eyebrow mr-1">Talla</span>
+            <span className="mr-1 eyebrow">Talla</span>
 
             <FilterChip href={buildHref({ orden: current.orden })} active={!current.talla}>
               Todas
@@ -95,7 +95,7 @@ export function ProductFilters({
         <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
           {availableTags.length > 1 ? (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="eyebrow mr-1">Etiqueta</span>
+              <span className="mr-1 eyebrow">Etiqueta</span>
 
               <FilterChip
                 href={buildHref({ talla: current.talla, orden: current.orden })}
@@ -117,7 +117,7 @@ export function ProductFilters({
           ) : null}
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="eyebrow mr-1">Orden</span>
+            <span className="mr-1 eyebrow">Orden</span>
             {SORT_OPTIONS.map((option) => (
               <FilterChip
                 key={option.value}

@@ -106,10 +106,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     /* La clase `lenis` se aplica aquí, antes de que corra cualquier efecto,
        para que el CSS de Lenis esté activo desde el primer frame. */
-    <html
-      lang="es-MX"
-      className={`${display.variable} ${sans.variable} ${mono.variable} lenis`}
-    >
+    <html lang="es-MX" className={`${display.variable} ${sans.variable} ${mono.variable} lenis`}>
       <body className="grain relative flex min-h-dvh flex-col bg-paper text-ink">
         {/* Salto directo al contenido: primer elemento enfocable de la página. */}
         <a

@@ -74,7 +74,11 @@ function buildAccordionItems(product: Product): AccordionItem[] {
   }
 
   if (product.measurements.length > 0) {
-    items.push({ id: "guia-de-medidas", title: "Guía de medidas", content: <Measurements product={product} /> });
+    items.push({
+      id: "guia-de-medidas",
+      title: "Guía de medidas",
+      content: <Measurements product={product} />,
+    });
   }
 
   if (product.careInstructions.length > 0) {
@@ -119,7 +123,10 @@ function Measurements({ product }: { product: Product }) {
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="border-b border-line">
-            <th scope="col" className="py-2 pr-4 text-left font-mono text-label tracking-[0.16em] uppercase">
+            <th
+              scope="col"
+              className="py-2 pr-4 text-left font-mono text-label tracking-[0.16em] uppercase"
+            >
               Talla
             </th>
             {columns.map((key) => (
@@ -142,7 +149,7 @@ function Measurements({ product }: { product: Product }) {
                 {row.size}
               </th>
               {columns.map((key) => (
-                <td key={key} className="py-3 pr-4 font-mono tabular-nums text-ash">
+                <td key={key} className="py-3 pr-4 font-mono text-ash tabular-nums">
                   {row.values[key] ?? "—"}
                 </td>
               ))}

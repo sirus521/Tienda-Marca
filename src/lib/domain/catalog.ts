@@ -15,9 +15,7 @@ export function getPrimaryImage(product: Product): ProductImage | null {
 
   /* Respaldo: la de menor `position`. Evita tarjetas sin imagen cuando el
      admin olvida marcar la principal. */
-  return (
-    product.images.slice().sort((a, b) => a.position - b.position)[0] ?? null
-  );
+  return product.images.slice().sort((a, b) => a.position - b.position)[0] ?? null;
 }
 
 /** Imagen secundaria: la que aparece al pasar el cursor sobre la tarjeta. */
@@ -192,7 +190,10 @@ export function isOptionValueAvailable(
 }
 
 /** Imagen asociada a una variante o, si no tiene, la principal del producto. */
-export function getVariantImage(product: Product, variant: ProductVariant | null): ProductImage | null {
+export function getVariantImage(
+  product: Product,
+  variant: ProductVariant | null,
+): ProductImage | null {
   if (variant?.imageId) {
     const match = product.images.find((image) => image.id === variant.imageId);
     if (match) return match;

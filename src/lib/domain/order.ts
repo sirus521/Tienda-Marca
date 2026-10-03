@@ -134,11 +134,7 @@ export const customerSchema = z.object({
     )
     .transform((value) => (value === "" ? null : value)),
 
-  postalCode: z
-    .string()
-    .trim()
-    .max(12, "El código postal es demasiado largo.")
-    .default(""),
+  postalCode: z.string().trim().max(12, "El código postal es demasiado largo.").default(""),
 
   city: z.string().trim().max(120, "La ciudad es demasiado larga.").default(""),
 
@@ -231,9 +227,7 @@ export function buildWhatsappMessage(order: Order): string {
   if (customer.email) lines.push(`Correo: ${customer.email}`);
 
   if (order.deliveryMethod !== "pickup") {
-    lines.push(
-      [customer.postalCode, customer.city, customer.state].filter(Boolean).join(", "),
-    );
+    lines.push([customer.postalCode, customer.city, customer.state].filter(Boolean).join(", "));
   }
 
   if (customer.notes) {

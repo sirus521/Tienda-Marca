@@ -115,12 +115,10 @@ export function ProductCard({ product, priority = false, index = 0, className }:
           </div>
 
           <div className="shrink-0 text-right">
-            {ranged ? <span className="eyebrow block">desde</span> : null}
-            <span className="block font-mono text-sm tabular-nums">
-              {formatMoney(minPrice)}
-            </span>
+            {ranged ? <span className="block eyebrow">desde</span> : null}
+            <span className="block font-mono text-sm tabular-nums">{formatMoney(minPrice)}</span>
             {cheapestVariant?.compareAtPriceCents && discount ? (
-              <span className="block font-mono text-xs text-ash-2 line-through tabular-nums">
+              <span className="block font-mono text-xs text-ash-2 tabular-nums line-through">
                 {formatMoney(cheapestVariant.compareAtPriceCents)}
               </span>
             ) : null}
@@ -129,7 +127,7 @@ export function ProductCard({ product, priority = false, index = 0, className }:
       </Link>
 
       {/* Índice de la tarjeta, en mono. Da ritmo editorial al grid. */}
-      <span className="eyebrow pointer-events-none absolute -top-5 left-0 hidden opacity-0 transition-opacity duration-500 group-hover:opacity-100 lg:block">
+      <span className="pointer-events-none absolute -top-5 left-0 hidden eyebrow opacity-0 transition-opacity duration-500 group-hover:opacity-100 lg:block">
         {String(index + 1).padStart(2, "0")}
       </span>
     </article>

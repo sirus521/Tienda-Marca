@@ -54,10 +54,7 @@ export function QuantityStepper({
         <span aria-hidden="true" className="block h-px w-3 bg-current" />
       </button>
 
-      <span
-        aria-live="polite"
-        className="w-8 text-center font-mono text-sm tabular-nums text-ink"
-      >
+      <span aria-live="polite" className="w-8 text-center font-mono text-sm text-ink tabular-nums">
         {value}
       </span>
 

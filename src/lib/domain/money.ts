@@ -93,7 +93,10 @@ export function parsePriceInput(input: string): number | null {
 
 /** Suma segura de centavos. */
 export function sumCents(values: readonly number[]): number {
-  return values.reduce((total, value) => total + (Number.isFinite(value) ? Math.round(value) : 0), 0);
+  return values.reduce(
+    (total, value) => total + (Number.isFinite(value) ? Math.round(value) : 0),
+    0,
+  );
 }
 
 /**

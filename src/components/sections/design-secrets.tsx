@@ -5,38 +5,32 @@ const SECRETS = [
   {
     index: "01",
     title: "Sin glow",
-    body:
-      "No hay neón, ni blur radiante, ni gradientes luminosos. La jerarquía visual se construye con tipografía, contraste, escala y movimiento. La elevación es una sombra de papel dura y contenida — una línea de 1px, una ligera translateY, nada de halos.",
+    body: "No hay neón, ni blur radiante, ni gradientes luminosos. La jerarquía visual se construye con tipografía, contraste, escala y movimiento. La elevación es una sombra de papel dura y contenida — una línea de 1px, una ligera translateY, nada de halos.",
   },
   {
     index: "02",
     title: "Tipografía única",
-    body:
-      "Slab serif para los titulares (eco del logo) y grotesca para el cuerpo. Dos familias, ninguna callada. El display tiene tracking negativo y escala fluida hasta ~16vw — ahí está el golpe visual, no en adornos.",
+    body: "Slab serif para los titulares (eco del logo) y grotesca para el cuerpo. Dos familias, ninguna callada. El display tiene tracking negativo y escala fluida hasta ~16vw — ahí está el golpe visual, no en adornos.",
   },
   {
     index: "03",
     title: "Espacio como producto",
-    body:
-      "Los bloques de sección usan hasta 9rem de padding. No es espacio muerto, es composición: el blanco es el soporte de la mayor parte de la página, y cada sección respira antes y después del producto.",
+    body: "Los bloques de sección usan hasta 9rem de padding. No es espacio muerto, es composición: el blanco es el soporte de la mayor parte de la página, y cada sección respira antes y después del producto.",
   },
   {
     index: "04",
     title: "Esquinas duras",
-    body:
-      "Radios de 1–3px, deliberados. Nada de pill shapes. Estética editorial y directa que no pelea contra el contenido: la forma se queda fuera y la jerarquía se mantiene en el contenido.",
+    body: "Radios de 1–3px, deliberados. Nada de pill shapes. Estética editorial y directa que no pelea contra el contenido: la forma se queda fuera y la jerarquía se mantiene en el contenido.",
   },
   {
     index: "05",
     title: "El header se queda quieto",
-    body:
-      "Cuando el visitante baja, la cabecera se va: el contenido toma el espacio. Al subir, reaparece con fundido para que la navegación vuelva sin costo visual. Así la portada no se fragmenta en una lista de secciones.",
+    body: "Cuando el visitante baja, la cabecera se va: el contenido toma el espacio. Al subir, reaparece con fundido para que la navegación vuelva sin costo visual. Así la portada no se fragmenta en una lista de secciones.",
   },
   {
     index: "06",
     title: "Monocromo + un solo acento",
-    body:
-      "Ink, bone, ash y line son la banda base. A la tinta se superpone un solo acento — el bronce del \"EST. 2026\" — con uso quirúrgico. Resultado: atemporal, y cualquier color de producto se lee inmediatamente por contraste.",
+    body: 'Ink, bone, ash y line son la banda base. A la tinta se superpone un solo acento — el bronce del "EST. 2026" — con uso quirúrgico. Resultado: atemporal, y cualquier color de producto se lee inmediatamente por contraste.',
   },
 ] as const;
 

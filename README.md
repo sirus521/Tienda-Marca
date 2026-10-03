@@ -58,13 +58,13 @@ pnpm cf:preview           # build + servidor local de workerd
 
 Los recursos de Cloudflare que usa el proyecto:
 
-| Binding | Tipo | Para qué |
-|---|---|---|
-| `tienda_ac` | D1 | catálogo, pedidos, autenticación |
-| `NEXT_TAG_CACHE_D1` | D1 | caché de tags de ISR, en base aparte |
-| `NEXT_INC_CACHE_R2_BUCKET` | R2 | páginas renderizadas por ISR |
-| `ASSETS` | Assets | estáticos |
-| `WORKER_SELF_REFERENCE` | Service | revalidación en segundo plano |
+| Binding                    | Tipo    | Para qué                             |
+| -------------------------- | ------- | ------------------------------------ |
+| `tienda_ac`                | D1      | catálogo, pedidos, autenticación     |
+| `NEXT_TAG_CACHE_D1`        | D1      | caché de tags de ISR, en base aparte |
+| `NEXT_INC_CACHE_R2_BUCKET` | R2      | páginas renderizadas por ISR         |
+| `ASSETS`                   | Assets  | estáticos                            |
+| `WORKER_SELF_REFERENCE`    | Service | revalidación en segundo plano        |
 
 La caché de tags va en su propia base a propósito: son tablas internas de
 Next.js y mezclarlas con el catálogo haría imposible razonar sobre los límites.
@@ -74,8 +74,8 @@ El detalle está en `wrangler.jsonc`.
 
 Solo hace falta una para desarrollo:
 
-| Variable | Para qué |
-|---|---|
+| Variable               | Para qué                                             |
+| ---------------------- | ---------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL` | URL canónica: Open Graph, sitemap, enlaces absolutos |
 
 En producción la fija `.env.production`, que está versionado y solo contiene esa
@@ -88,17 +88,17 @@ todavía no existen: R2 para imágenes de producto, y MercadoPago si algún día
 
 ## Scripts
 
-| Comando | Qué hace |
-|---|---|
-| `pnpm dev` | servidor de desarrollo con bindings simulados |
-| `pnpm build` / `pnpm start` | build y arranque en Node (no en Workers) |
-| `pnpm typecheck` | `tsc --noEmit` |
-| `pnpm lint` | ESLint |
-| `pnpm format` | Prettier |
-| `pnpm db:generate` | genera un `.sql` nuevo desde el esquema |
-| `pnpm db:migrate:local` / `:remote` | aplica migraciones |
-| `pnpm db:seed:local` / `:remote` | siembra el catálogo |
-| `pnpm cf:build` / `cf:preview` / `cf:deploy` | ciclo de Cloudflare |
+| Comando                                      | Qué hace                                      |
+| -------------------------------------------- | --------------------------------------------- |
+| `pnpm dev`                                   | servidor de desarrollo con bindings simulados |
+| `pnpm build` / `pnpm start`                  | build y arranque en Node (no en Workers)      |
+| `pnpm typecheck`                             | `tsc --noEmit`                                |
+| `pnpm lint`                                  | ESLint                                        |
+| `pnpm format`                                | Prettier                                      |
+| `pnpm db:generate`                           | genera un `.sql` nuevo desde el esquema       |
+| `pnpm db:migrate:local` / `:remote`          | aplica migraciones                            |
+| `pnpm db:seed:local` / `:remote`             | siembra el catálogo                           |
+| `pnpm cf:build` / `cf:preview` / `cf:deploy` | ciclo de Cloudflare                           |
 
 ## Estructura
 

@@ -63,7 +63,7 @@ export function CartLineRow({ line }: { line: CartLine }) {
             <p className="mt-0.5 font-mono text-xs text-ash-2">{line.variantSku}</p>
           </div>
 
-          <p className="shrink-0 font-mono text-sm tabular-nums text-ink">
+          <p className="shrink-0 font-mono text-sm text-ink tabular-nums">
             {formatMoney(lineTotal)}
           </p>
         </div>

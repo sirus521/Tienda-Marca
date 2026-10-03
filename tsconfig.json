@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -27,16 +23,9 @@
         "name": "next"
       }
     ],
-    "types": [
-      "node",
-      "react",
-      "react-dom",
-      "@cloudflare/workers-types"
-    ],
+    "types": ["node", "react", "react-dom", "@cloudflare/workers-types"],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -46,10 +35,5 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    ".open-next",
-    ".wrangler"
-  ]
+  "exclude": ["node_modules", ".next", ".open-next", ".wrangler"]
 }

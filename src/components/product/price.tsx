@@ -40,18 +40,13 @@ export function Price({
 
   return (
     <div className={cn("flex flex-wrap items-baseline gap-x-3 gap-y-1", className)}>
-      <span
-        className={cn(
-          "font-mono tabular-nums",
-          size === "lg" ? "text-2xl" : "text-base",
-        )}
-      >
+      <span className={cn("font-mono tabular-nums", size === "lg" ? "text-2xl" : "text-base")}>
         {formatMoney(priceCents)}
       </span>
 
       {discount ? (
         <>
-          <span className="font-mono text-sm text-ash-2 line-through tabular-nums">
+          <span className="font-mono text-sm text-ash-2 tabular-nums line-through">
             {formatMoney(compareAtPriceCents as number)}
           </span>
           {showDiscount ? <Badge variant="outline">−{discount}%</Badge> : null}

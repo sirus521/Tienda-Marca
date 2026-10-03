@@ -41,12 +41,7 @@ export async function FeaturedProducts() {
       <div className="container-ac py-20 lg:py-28">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              priority={index < 2}
-              index={index}
-            />
+            <ProductCard key={product.id} product={product} priority={index < 2} index={index} />
           ))}
         </div>
       </div>

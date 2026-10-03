@@ -51,7 +51,10 @@ export function NoticeList() {
 
     const parsed = phoneSchema.safeParse(phone);
     if (!parsed.success) {
-      setStatus({ kind: "error", message: parsed.error.issues[0]?.message ?? "Teléfono inválido." });
+      setStatus({
+        kind: "error",
+        message: parsed.error.issues[0]?.message ?? "Teléfono inválido.",
+      });
       return;
     }
 
@@ -85,9 +88,12 @@ export function NoticeList() {
 
           <div className="lg:pt-10">
             {configured ? (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:flex-row sm:items-start">
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 sm:flex-row sm:items-start"
+              >
                 <div className="flex-1">
-                  <label htmlFor="telefono-avisos" className="eyebrow block">
+                  <label htmlFor="telefono-avisos" className="block eyebrow">
                     Teléfono
                   </label>
                   <input

@@ -8,7 +8,12 @@ import { CartLineRow } from "@/components/cart/cart-line-row";
 import { buttonStyles } from "@/components/ui/button";
 import { easeOutExpo } from "@/lib/motion/tokens";
 import { formatMoney } from "@/lib/domain/money";
-import { cartStore, useCartLines, useCartOpen, useCartSubtotalCents } from "@/lib/stores/cart-store";
+import {
+  cartStore,
+  useCartLines,
+  useCartOpen,
+  useCartSubtotalCents,
+} from "@/lib/stores/cart-store";
 
 /**
  * Drawer de la bolsa
@@ -95,7 +100,7 @@ export function CartDrawer() {
               <button
                 type="button"
                 onClick={close}
-                className="flex size-11 items-center justify-center -mr-2 text-ink transition-colors duration-200 hover:bg-bone-2"
+                className="-mr-2 flex size-11 items-center justify-center text-ink transition-colors duration-200 hover:bg-bone-2"
               >
                 <span className="sr-only">Cerrar la bolsa</span>
                 <span aria-hidden="true" className="relative block size-4">
@@ -129,7 +134,7 @@ export function CartDrawer() {
                 <div className="shrink-0 border-t border-line px-5 py-5">
                   <div className="flex items-baseline justify-between">
                     <span className="font-mono text-label text-ash uppercase">Subtotal</span>
-                    <span className="font-mono text-xl tabular-nums text-ink">
+                    <span className="font-mono text-xl text-ink tabular-nums">
                       {formatMoney(subtotalCents)}
                     </span>
                   </div>

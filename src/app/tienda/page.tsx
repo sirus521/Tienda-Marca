@@ -4,7 +4,12 @@ import Link from "next/link";
 import { ProductFilters } from "@/components/product/product-filters";
 import { ProductGrid } from "@/components/product/product-grid";
 import { buttonStyles } from "@/components/ui/button";
-import { listAvailableSizes, listProducts, listTags, type ProductSort } from "@/lib/data/catalog-repository";
+import {
+  listAvailableSizes,
+  listProducts,
+  listTags,
+  type ProductSort,
+} from "@/lib/data/catalog-repository";
 
 /**
  * Tienda — listado completo

@@ -19,7 +19,9 @@ export const site = {
 
   /** Plantilla de títulos. `%s` lo sustituye la página. */
   titleTemplate: (page?: string) =>
-    page ? `${page} — ${brand.identity.name}` : `${brand.identity.name} — ${brand.identity.tagline}`,
+    page
+      ? `${page} — ${brand.identity.name}`
+      : `${brand.identity.name} — ${brand.identity.tagline}`,
 
   /** Palabras clave base. Se suman a las específicas de cada producto. */
   keywords: [

@@ -133,14 +133,12 @@ function assemble(row: typeof products.$inferSelect, children: ChildRows): Produ
     position: option.position,
     values: children.optionValues
       .filter((value) => value.optionId === option.id)
-      .map(
-        (value): ProductOptionValue => ({
-          id: value.id,
-          value: value.value,
-          hexColor: value.hexColor,
-          position: value.position,
-        }),
-      ),
+      .map((value): ProductOptionValue => ({
+        id: value.id,
+        value: value.value,
+        hexColor: value.hexColor,
+        position: value.position,
+      })),
   }));
 
   return {
@@ -178,7 +176,7 @@ function assemble(row: typeof products.$inferSelect, children: ChildRows): Produ
  */
 async function loadProducts(
   where: SQL | undefined,
-  orderBy?: (rows: typeof products.$inferSelect[]) => typeof products.$inferSelect[],
+  orderBy?: (rows: (typeof products.$inferSelect)[]) => (typeof products.$inferSelect)[],
 ): Promise<Product[]> {
   const db = await getDb();
 
@@ -200,7 +198,7 @@ async function loadProducts(
       .where(
         inArray(
           productOptionValues.optionId,
-         /* Los valores se piden por `optionId`, y conocer esos ids exige una
+          /* Los valores se piden por `optionId`, y conocer esos ids exige una
             vuelta previa. En vez de una quinta consulta, el `inArray` anidado
             deja que D1 lo resuelva todo en una sola sentencia. */
           db
@@ -212,10 +210,10 @@ async function loadProducts(
   ]);
 
   const children: ChildRows = {
-    images: imageRows as typeof productImages.$inferSelect[],
-    variants: variantRows as typeof productVariants.$inferSelect[],
-    options: optionRows as typeof productOptions.$inferSelect[],
-    optionValues: optionValueRows as typeof productOptionValues.$inferSelect[],
+    images: imageRows as (typeof productImages.$inferSelect)[],
+    variants: variantRows as (typeof productVariants.$inferSelect)[],
+    options: optionRows as (typeof productOptions.$inferSelect)[],
+    optionValues: optionValueRows as (typeof productOptionValues.$inferSelect)[],
   };
 
   return rows.map((row) =>

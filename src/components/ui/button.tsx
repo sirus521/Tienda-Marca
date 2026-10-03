@@ -25,7 +25,8 @@ const variants: Record<ButtonVariant, string> = {
     "border border-line-strong text-ink hover:border-ink hover:bg-ink hover:text-bone active:translate-y-px",
   /* Sin caja: solo texto con subrayado que barre. */
   ghost: "text-ink hover:bg-bone-2 active:translate-y-px",
-  danger: "border border-danger/40 text-danger hover:bg-danger hover:text-bone active:translate-y-px",
+  danger:
+    "border border-danger/40 text-danger hover:bg-danger hover:text-bone active:translate-y-px",
 };
 
 /* Alturas mínimas de 44px en md y lg: es el área táctil mínima recomendada. */

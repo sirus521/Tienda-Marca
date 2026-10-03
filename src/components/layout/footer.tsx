@@ -35,7 +35,9 @@ export function Footer() {
         <Marquee duration={38}>
           <span className="flex items-center gap-8 pr-8 font-display text-title whitespace-nowrap text-ink">
             {brand.identity.name}
-            <span className="font-mono text-xs tracking-[0.2em] text-bronze">{establishedLabel}</span>
+            <span className="font-mono text-xs tracking-[0.2em] text-bronze">
+              {establishedLabel}
+            </span>
           </span>
         </Marquee>
       </div>
@@ -58,7 +60,7 @@ export function Footer() {
         </div>
 
         <nav aria-labelledby="footer-tienda">
-          <h2 id="footer-tienda" className="eyebrow mb-4">
+          <h2 id="footer-tienda" className="mb-4 eyebrow">
             Tienda
           </h2>
           <ul className="flex flex-col gap-3">
@@ -74,7 +76,7 @@ export function Footer() {
 
         {hasFooterNav ? (
           <nav aria-labelledby="footer-ayuda">
-            <h2 id="footer-ayuda" className="eyebrow mb-4">
+            <h2 id="footer-ayuda" className="mb-4 eyebrow">
               Ayuda
             </h2>
             <ul className="flex flex-col gap-3">
@@ -90,7 +92,7 @@ export function Footer() {
         ) : null}
 
         <div>
-          <h2 className="eyebrow mb-4">Contacto</h2>
+          <h2 className="mb-4 eyebrow">Contacto</h2>
           <ul className="flex flex-col gap-3 text-sm">
             {hasWhatsApp ? (
               <li>

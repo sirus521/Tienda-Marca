@@ -65,8 +65,12 @@ export const products = sqliteTable(
     seoTitle: text("seo_title"),
     seoDescription: text("seo_description"),
     metaImageId: text("meta_image_id"),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     /* El índice sobre `slug` sobra: `.unique()` ya crea su propio índice.
@@ -223,8 +227,12 @@ export const collections = sqliteTable(
     isFeatured: integer("is_featured", { mode: "boolean" }).notNull().default(false),
     isPublished: integer("is_published", { mode: "boolean" }).notNull().default(false),
     position: integer("position").notNull().default(0),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     slugIdx: index("collections_slug_idx").on(table.slug),
@@ -305,8 +313,12 @@ export const orders = sqliteTable(
     /* Solo para el negocio. Nunca se devuelve al cliente. */
     internalNotes: text("internal_notes"),
 
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     statusIdx: index("orders_status_idx").on(table.status),
@@ -370,7 +382,9 @@ export const orderStatusHistory = sqliteTable(
     toStatus: text("to_status").notNull(),
     note: text("note"),
     changedBy: text("changed_by"),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     orderIdIdx: index("order_status_history_order_id_idx").on(table.orderId),
@@ -392,11 +406,17 @@ export const adminUsers = sqliteTable(
     email: text("email").notNull().unique(),
     emailVerified: integer("email_verified", { mode: "boolean" }).notNull().default(false),
     image: text("image"),
-    role: text("role", { enum: ["owner", "editor"] }).notNull().default("editor"),
+    role: text("role", { enum: ["owner", "editor"] })
+      .notNull()
+      .default("editor"),
     isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
     lastLoginAt: text("last_login_at"),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     emailIdx: index("admin_users_email_idx").on(table.email),
@@ -426,8 +446,12 @@ export const adminAccounts = sqliteTable(
     refreshTokenExpiresAt: text("refresh_token_expires_at"),
     scope: text("scope"),
     password: text("password"),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     userIdIdx: index("admin_accounts_user_id_idx").on(table.userId),
@@ -448,8 +472,12 @@ export const sessionTokens = sqliteTable(
     expiresAt: text("expires_at").notNull(),
     ipAddress: text("ip_address"),
     userAgent: text("user_agent"),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     userIdIdx: index("session_tokens_user_id_idx").on(table.userId),
@@ -470,8 +498,12 @@ export const authVerifications = sqliteTable(
     identifier: text("identifier").notNull(),
     value: text("value").notNull(),
     expiresAt: text("expires_at").notNull(),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
-    updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    updatedAt: text("updated_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     identifierIdx: index("auth_verifications_identifier_idx").on(table.identifier),
@@ -494,7 +526,9 @@ export const auditLogs = sqliteTable(
     entityId: text("entity_id"),
     /* JSON con el antes/después. */
     payload: text("payload"),
-    createdAt: text("created_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
   },
   (table) => ({
     entityIdx: index("audit_logs_entity_idx").on(table.entity),
@@ -513,5 +547,7 @@ export const auditLogs = sqliteTable(
 export const settings = sqliteTable("settings", {
   key: text("key").primaryKey(),
   value: text("value").notNull().default("{}"),
-  updatedAt: text("updated_at").notNull().default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+  updatedAt: text("updated_at")
+    .notNull()
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
 });

@@ -55,8 +55,7 @@ export function ProductDetail({ product }: { product: Product }) {
   const { variant } = resolveVariantSelection(product, selection);
 
   /* Imagen visible: la elegida a mano o, si no, la de la variante activa. */
-  const activeImage =
-    getVariantImage(product, variant) ?? getPrimaryImage(product);
+  const activeImage = getVariantImage(product, variant) ?? getPrimaryImage(product);
   const activeImageId = imageOverride ?? activeImage?.id ?? null;
 
   const stock = variant?.stock ?? 0;
@@ -83,11 +82,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
     cartStore.getState().addLine(buildCartLine(product, variant), quantity);
     cartStore.getState().open();
-    setFeedback(
-      quantity > 1
-        ? `${quantity} piezas añadidas a la bolsa.`
-        : "Añadido a la bolsa.",
-    );
+    setFeedback(quantity > 1 ? `${quantity} piezas añadidas a la bolsa.` : "Añadido a la bolsa.");
   }
 
   return (
@@ -239,7 +234,10 @@ function QuantityStepper({
         className="relative w-12 transition-colors duration-300 hover:bg-bone-2 disabled:opacity-35 disabled:hover:bg-transparent"
       >
         <span aria-hidden="true" className="mx-auto block h-px w-3 bg-ink" />
-        <span aria-hidden="true" className="absolute top-1/2 left-1/2 block h-3 w-px -translate-1/2 bg-ink" />
+        <span
+          aria-hidden="true"
+          className="absolute top-1/2 left-1/2 block h-3 w-px -translate-1/2 bg-ink"
+        />
       </button>
     </div>
   );

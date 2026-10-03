@@ -111,7 +111,9 @@ export function Header() {
       transition={{ duration: 0.4, ease: easeOutExpo }}
       className={cn(
         "sticky top-0 z-40 w-full transition-colors duration-500",
-        scrolled ? "border-b border-line bg-bone/85 backdrop-blur-md" : "border-b border-transparent",
+        scrolled
+          ? "border-b border-line bg-bone/85 backdrop-blur-md"
+          : "border-b border-transparent",
       )}
     >
       <div className="container-ac">

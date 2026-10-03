@@ -45,9 +45,7 @@ export function ProductGallery({
   productName,
 }: ProductGalleryProps) {
   if (images.length === 0) {
-    return (
-      <div className="relative aspect-4/5 w-full bg-bone-2" aria-hidden="true" />
-    );
+    return <div className="relative aspect-4/5 w-full bg-bone-2" aria-hidden="true" />;
   }
 
   const ordered = images.slice().sort((a, b) => a.position - b.position);

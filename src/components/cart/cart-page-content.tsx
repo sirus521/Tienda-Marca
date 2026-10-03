@@ -38,8 +38,8 @@ export function CartPageContent() {
         <p className="eyebrow">Tu bolsa</p>
         <h2 className="mt-5 text-heading">Aquí no hay nada todavía</h2>
         <p className="mx-auto mt-4 max-w-sm text-ash">
-          Elige una talla en la tienda y la agregamos aquí. La bolsa se guarda en este navegador, así
-          que no se pierde si recargas.
+          Elige una talla en la tienda y la agregamos aquí. La bolsa se guarda en este navegador,
+          así que no se pierde si recargas.
         </p>
         <div className="mt-9 flex justify-center">
           <Link href="/tienda" className={buttonStyles({ size: "lg" })}>
@@ -94,14 +94,14 @@ export function CartPageContent() {
           <dl className="mt-5 flex flex-col gap-3">
             <div className="flex items-baseline justify-between">
               <dt className="font-mono text-label text-ash uppercase">Artículos</dt>
-              <dd className="font-mono text-sm tabular-nums text-ink">
+              <dd className="font-mono text-sm text-ink tabular-nums">
                 {lines.reduce((total, line) => total + line.quantity, 0)}
               </dd>
             </div>
 
             <div className="flex items-baseline justify-between">
               <dt className="font-mono text-label text-ash uppercase">Subtotal</dt>
-              <dd className="font-mono text-xl tabular-nums text-ink">
+              <dd className="font-mono text-xl text-ink tabular-nums">
                 {formatMoney(subtotalCents)}
               </dd>
             </div>

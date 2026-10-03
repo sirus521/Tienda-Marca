@@ -229,4 +229,6 @@ const header = [
 writeFileSync(OUTPUT, header + statements.join("\n") + "\n", "utf8");
 
 console.log(`SQL escrito en ${OUTPUT}`);
-console.log(`${statements.length} sentencias para ${seedProducts.length} productos y ${tagIds.size} etiquetas.`);
+console.log(
+  `${statements.length} sentencias para ${seedProducts.length} productos y ${tagIds.size} etiquetas.`,
+);

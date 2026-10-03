@@ -35,12 +35,7 @@ type VariantSelectorProps = {
  * siempre presente. Hay personas que no distinguen bien los colores y personas
  * que usan lector de pantalla: el texto no es decorativo, es el dato.
  */
-export function VariantSelector({
-  product,
-  selection,
-  onChange,
-  className,
-}: VariantSelectorProps) {
+export function VariantSelector({ product, selection, onChange, className }: VariantSelectorProps) {
   const options = product.options.slice().sort((a, b) => a.position - b.position);
 
   if (options.length === 0) return null;
@@ -57,7 +52,7 @@ export function VariantSelector({
             {/* `legend` y no un `span`: agrupa los botones para lectores de
                 pantalla, que anuncian "Talla, L, seleccionado" en lugar de
                 solo "L, seleccionado". */}
-            <legend className="eyebrow flex w-full items-baseline justify-between gap-3">
+            <legend className="flex w-full items-baseline justify-between gap-3 eyebrow">
               <span>{option.name}</span>
               <span className="text-ink normal-case">{selectedValue ?? "—"}</span>
             </legend>
