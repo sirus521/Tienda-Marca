@@ -20,6 +20,7 @@
 - `drizzle.config.ts` declara `driver: "d1-http"` a propósito. Las migraciones se
   aplican con `wrangler d1 migrations apply` (sesión OAuth), NO con drizzle-kit.
   Ver `mem:architecture/deploy`.
-- Las tablas de autenticación (`admin_users`, `admin_accounts`, `session_tokens`,
-  `auth_verifications`) existen en el esquema pero **no hay librería de
-  autenticación instalada ni panel admin**. No des por hecho que haya login.
+- El panel de admin vive en `/admin`, con autenticación custom basada en
+  scrypt y sesión opaca en `session_tokens`. No hay `better-auth` ni NextAuth:
+  el hash de contraseña no sale de `admin-repository` y el token solo se guarda
+  como SHA-256.
