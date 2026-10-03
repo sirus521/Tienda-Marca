@@ -35,9 +35,17 @@ import type { CartLine, Order, OrderCustomer, DeliveryMethod } from "@/lib/domai
  * entre la lectura y la escritura.
  */
 
-/** Resultado de intentar crear un pedido. Discriminado por `ok`. */
+/**
+ * Resultado de intentar crear un pedido. Discriminado por `ok`.
+ *
+ * `productSlugs` va en el caso exitoso porque quien llama necesita saber qué
+ * páginas quedaron desactualizadas: este pedido Vació stock, y las fichas de
+ * esos productos muestran "quedan N". El repositorio ya tenía el slug a mano
+ * —los lee para comprobar que el producto esté publicado—, así que devolverlo
+ * cuesta un `Map` y ahorra a la acción una segunda consulta a la base.
+ */
 export type CreateOrderResult =
-  | { ok: true; order: Order }
+  | { ok: true; order: Order; productSlugs: string[] }
   | { ok: false; error: string };
 
 /** Cuántos folios se prueban antes de rendirse. */
@@ -87,7 +95,12 @@ export async function createOrder(
     productIds.length === 0
       ? []
       : await db
-          .select({ id: products.id, name: products.name, status: products.status })
+          .select({
+            id: products.id,
+            name: products.name,
+            slug: products.slug,
+            status: products.status,
+          })
           .from(products)
           .where(inArray(products.id, productIds));
 
@@ -124,6 +137,7 @@ export async function createOrder(
       variantId: variant.variantId,
       productId: variant.productId,
       productName: product.name,
+      productSlug: product.slug,
       sku: variant.sku,
       optionValues: parseOptionValues(variant.optionValues),
       unitPriceCents: variant.priceCents,
@@ -250,7 +264,11 @@ export async function createOrder(
         updatedAt: now,
       };
 
-      return { ok: true, order };
+      /* Un pedido puede traer varias tallas del mismo producto, y la ficha es
+         una sola: sin esto se revalidaría la misma URL varias veces. */
+      const productSlugs = [...new Set(resolved.map((line) => line.productSlug))];
+
+      return { ok: true, order, productSlugs };
     } catch (error) {
       /* Choque de folio: es lo esperado, no un fallo. Se prueba otro. */
       if (isUniqueViolation(error)) continue;
@@ -280,6 +298,7 @@ type ResolvedLine = {
   variantId: string;
   productId: string;
   productName: string;
+  productSlug: string;
   sku: string;
   optionValues: Record<string, string>;
   unitPriceCents: number;

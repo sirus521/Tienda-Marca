@@ -124,10 +124,23 @@ export async function submitOrderAction(
     return { status: "error", message: result.error };
   }
 
-  /* El catálogo y la bolsa del servidor cambiaron: la portada y la tienda
-     muestran stock y productos que ya no son los mismos. */
+  /* Este pedido acaba vaciar stock, y el stock se ve en tres sitios. La
+     portada y la tienda lo muestran en la rejilla; cada ficha lo muestra en el
+     selector de talla con "quedan N piezas". Sin esto, un producto agotado
+     seguiría anunciando stock hasta que vencieran sus 5 minutos de ISR — y
+     durante esos 5 minutos se puede volver a intentar comprar lo que ya no
+     hay, que es justo el fallo que el CHECK de stock evita en la base pero no
+     en la pantalla.
+
+     Se revalidan solo las fichas de los productos de ESTE pedido y no todas:
+     con un catálogo chico da igual, y con uno grande cada venta tiraría abajo
+     el HTML de páginas que no cambiaron. */
   revalidatePath("/");
   revalidatePath("/tienda");
+
+  for (const slug of result.productSlugs) {
+    revalidatePath(`/producto/${slug}`);
+  }
 
   return {
     status: "success",
