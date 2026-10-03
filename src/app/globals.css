@@ -50,7 +50,7 @@
 
   /* ---------- Escala tipográfica fluida ----------
      clamp() elimina la necesidad de media queries para tipografía. */
-  --text-hero: clamp(3.25rem, 15vw, 13rem);
+  --text-hero: clamp(2.75rem, 12vw, 10rem);
   --text-hero--line-height: 0.86;
   --text-hero--letter-spacing: -0.04em;
   --text-hero--font-weight: 400;
@@ -232,6 +232,12 @@
   line-height: var(--text-label--line-height);
   text-transform: uppercase;
   color: var(--color-ash);
+}
+
+/* Separador de sección: borde inferior uniforme usado en todas las
+   secciones de contenido (Featured, Story, Values, Notice). */
+@utility section-divider {
+  border-bottom: 1px solid var(--color-line);
 }
 
 @layer components {

@@ -56,7 +56,7 @@ export function Story() {
      contenido completo. No se esconde nada: se muestra y ya. */
   if (prefersReducedMotion) {
     return (
-      <section ref={sectionRef} className="container-ac py-section">
+      <section ref={sectionRef} className="container-ac py-section section-divider">
         <span className="eyebrow">02 / 04</span>
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
           <div className="flex flex-col gap-8">
@@ -81,7 +81,7 @@ export function Story() {
   }
 
   return (
-    <section ref={sectionRef} className="container-ac py-section">
+    <section ref={sectionRef} className="container-ac py-section section-divider">
       <span className="eyebrow">02 / 04</span>
 
       <div className="mt-10 grid gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">

@@ -33,12 +33,12 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
       >
-        <div className="w-[105vw] max-w-none opacity-[0.035]">
+        <div className="w-[120rem] max-w-full opacity-[0.035]">
           <LogoMark className="w-full text-ink" />
         </div>
       </div>
 
-      <div className="container-ac relative z-10 flex min-h-[88svh] flex-col justify-between pt-14 pb-10 lg:min-h-[92svh]">
+      <div className="container-ac relative z-10 flex min-h-[88svh] flex-col justify-between py-section lg:py-[clamp(6rem,12vw,11rem)] lg:min-h-[92svh]">
         {/* ---------------- Bloque principal ---------------- */}
         <div className="max-w-5xl">
           <p className="eyebrow animate-fade-up">
@@ -62,7 +62,7 @@ export function Hero() {
         </div>
 
         {/* ---------------- Cierre del hero ---------------- */}
-        <div className="mt-14 flex flex-col gap-8 lg:mt-20 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-10 flex flex-col gap-8 lg:mt-14 lg:flex-row lg:items-start lg:justify-between">
           <p className="animate-fade-up max-w-md text-lead text-ash [animation-delay:420ms]">
             {brand.identity.description}
           </p>
@@ -71,9 +71,10 @@ export function Hero() {
             <Link href="/tienda" className={buttonStyles({ variant: "primary", size: "lg" })}>
               Ver la tienda
             </Link>
-            <Link href="/nosotros" className={buttonStyles({ variant: "secondary", size: "lg" })}>
-              Nuestra historia
-            </Link>
+            {/* El botón secundario apuntaba a `/nosotros`, que todavía no
+                existe. Se retira junto con los enlaces de `nav.ts` para no
+                dejar un 404 en la primera pantalla; vuelve cuando la página
+                de historia esté construida. */}
           </div>
         </div>
       </div>

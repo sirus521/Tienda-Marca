@@ -39,12 +39,12 @@ export const brand = {
   /* ---------------------------------------------------------------- */
   /* Contacto                                                          */
   /* ---------------------------------------------------------------- */
-  /* TODO(usuario): reemplazar por datos reales antes de lanzar.
-     Mientras `whatsapp` esté vacío, el checkout se bloquea con un aviso
-     claro en pantalla en lugar de mandar pedidos al vacío. */
+  /* El número vive aquí y en ningún otro archivo. Lo consume el checkout,
+     la lista de avisos y el pie de página. Cambiar de número es cambiar
+     esta línea. */
   contact: {
-    /** Solo dígitos, con código de país. Ejemplo: "528112345678". */
-    whatsapp: "",
+    /** Solo dígitos, con código de país y sin "+". Ejemplo: "528112345678". */
+    whatsapp: "527151447984",
     /** Mensaje que se precarga al abrir la conversación. */
     whatsappGreeting: "¡Hola AC! Vengo de la tienda en línea.",
     /** Correo de atención a clientes. */

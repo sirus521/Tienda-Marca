@@ -37,11 +37,11 @@ const VALUES = [
  */
 export function Values() {
   return (
-    <section className="border-y border-line bg-bone-2/60">
+    <section className="border-b border-line bg-bone-2/60">
       <div className="container-ac py-section">
         <span className="eyebrow">03 / 04</span>
 
-        <h2 className="mt-4 max-w-3xl text-title">Cuatro cosas que no negociamos</h2>
+        <h2 className="mt-4 text-title">Cuatro cosas que no negociamos</h2>
 
         <ul className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {VALUES.map((value, index) => (

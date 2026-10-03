@@ -28,7 +28,7 @@ export async function FeaturedProducts() {
 
   if (products.length === 0) {
     return (
-      <section className="border-t border-line">
+      <section className="border-b border-line">
         <div className="container-ac py-20 lg:py-28">
           <p className="text-sm text-ash">Cargando productos...</p>
         </div>
@@ -37,7 +37,7 @@ export async function FeaturedProducts() {
   }
 
   return (
-    <section className="border-t border-line">
+    <section className="border-b border-line">
       <div className="container-ac py-20 lg:py-28">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((product, index) => (
@@ -85,7 +85,7 @@ export function ProductGrid({
   priority?: boolean;
 }) {
   return (
-    <section className="border-t border-line">
+    <section className="border-b border-line">
       <div className="container-ac py-20 lg:py-28">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((product, index) => (

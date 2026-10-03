@@ -4,6 +4,7 @@ import { Logo } from "@/components/brand/logo";
 import { Marquee } from "@/components/ui/marquee";
 import { brand, establishedLabel } from "@/config/brand";
 import { footerNav, mainNav } from "@/config/nav";
+import { cn } from "@/lib/utils/cn";
 
 /**
  * Footer.
@@ -15,11 +16,17 @@ import { footerNav, mainNav } from "@/config/nav";
  *
  * Los datos de contacto se renderizan solo si existen. Mostrar un teléfono
  * vacío o un "wa.me/" roto es peor que no mostrar nada.
+ *
+ * Las columnas de enlaces se renderizan solo si tienen entradas. Una columna
+ * con encabezado y cero enlaces —o un enlace a una página que aún no existe,
+ * que además Next.js prefetchea y convierte en un 404 por carga— se lee como
+ * una tienda rota.
  */
 export function Footer() {
   const year = new Date().getFullYear();
   const { whatsapp, email, instagram, location } = brand.contact;
   const hasWhatsApp = whatsapp.trim().length >= 10;
+  const hasFooterNav = footerNav.length > 0;
 
   return (
     <footer className="mt-section border-t border-line">
@@ -33,8 +40,16 @@ export function Footer() {
         </Marquee>
       </div>
 
-      {/* ---------------- Columnas ---------------- */}
-      <div className="container-ac grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
+      {/* ---------------- Columnas ----------------
+          La columna "Ayuda" solo se pinta si `footerNav` tiene entradas. Con la
+          lista vacía, una columna con encabezado y cero enlaces se lee como una
+          tienda rota, y la rejilla además dejaría un hueco de una celda. */}
+      <div
+        className={cn(
+          "container-ac grid gap-12 py-16 md:grid-cols-2",
+          hasFooterNav ? "lg:grid-cols-4" : "lg:grid-cols-3",
+        )}
+      >
         <div className="flex flex-col gap-4">
           <Link href="/" aria-label={`${brand.identity.name} — inicio`} className="inline-flex">
             <Logo variant="lockup" size={44} decorative />
@@ -57,20 +72,22 @@ export function Footer() {
           </ul>
         </nav>
 
-        <nav aria-labelledby="footer-ayuda">
-          <h2 id="footer-ayuda" className="eyebrow mb-4">
-            Ayuda
-          </h2>
-          <ul className="flex flex-col gap-3">
-            {footerNav.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href} className="link-underline text-sm text-ink">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {hasFooterNav ? (
+          <nav aria-labelledby="footer-ayuda">
+            <h2 id="footer-ayuda" className="eyebrow mb-4">
+              Ayuda
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {footerNav.map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="link-underline text-sm text-ink">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ) : null}
 
         <div>
           <h2 className="eyebrow mb-4">Contacto</h2>
