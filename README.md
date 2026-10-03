@@ -49,6 +49,28 @@ pnpm db:seed:remote       # ídem contra la base real
 El seed viene de `src/lib/data/seed-products.ts` y todas sus sentencias son
 `INSERT OR REPLACE`: se puede volver a ejecutar sin duplicar nada.
 
+### Panel de administración
+
+El panel vive en `/admin` y protege `/admin/*` con `src/proxy.ts` + layout del
+panel. Para crear el primer admin:
+
+```bash
+# Genera el SQL en stdout; la contraseña se pide sin eco
+# y no se escribe ningún archivo.
+pnpm db:create-admin -- --email admin@ac.mx --name "Dueña" --role owner | \
+  wrangler d1 execute tienda-ac --local --file=-
+```
+
+Para crearlo contra la base real, sustituye `--local` por `--remote`.
+
+Dentro del panel:
+
+- `/admin/pedidos` — lista, detalle y cambio de estado de pedidos.
+- `/admin/catalogo` — stock, precios y estado de publicación.
+- `/admin/colecciones` — publicar/destacar colecciones.
+- `/admin/etiquetas` — crear/borrar tags.
+- `/admin/ajustes` — settings JSON y bitácora de auditoría.
+
 ## Despliegue
 
 ```bash
@@ -98,6 +120,8 @@ todavía no existen: R2 para imágenes de producto, y MercadoPago si algún día
 | `pnpm db:generate`                           | genera un `.sql` nuevo desde el esquema       |
 | `pnpm db:migrate:local` / `:remote`          | aplica migraciones                            |
 | `pnpm db:seed:local` / `:remote`             | siembra el catálogo                           |
+| `pnpm db:create-admin`                       | genera SQL para crear admin en stdout         |
+| `pnpm check:auth`                            | prueba local de helpers de autenticación      |
 | `pnpm cf:build` / `cf:preview` / `cf:deploy` | ciclo de Cloudflare                           |
 
 ## Estructura
@@ -105,6 +129,7 @@ todavía no existen: R2 para imágenes de producto, y MercadoPago si algún día
 ```
 src/
   app/            rutas (App Router)
+  app/admin/      panel: pedidos, catálogo, collections, tags, ajustes
   components/     brand · cart · checkout · layout · motion · product · sections · ui
   config/         brand.ts (identidad) · nav.ts · site.ts (técnico)
   lib/
