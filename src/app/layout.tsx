@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bevan, Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
+import { CartDrawer } from "@/components/cart/cart-drawer";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { MotionProvider } from "@/components/motion/motion-provider";
@@ -123,10 +124,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <MotionProvider>
           <ScrollProgress />
           <Header />
+
           <main id="contenido" className="flex-1">
             {children}
           </main>
+
           <Footer />
+
+          {/* El drawer del carrito vive aquí, una sola vez, para que esté
+              disponible desde cualquier página sin duplicarlo. Se monta
+              siempre en el árbol (aunque cerrado no pinta nada) porque su
+              estado —abierto o cerrado— lo lleva el store de Zustand, y sacarlo
+              del DOM entre navegaciones perdería la transición de salida. */}
+          <CartDrawer />
         </MotionProvider>
       </body>
     </html>

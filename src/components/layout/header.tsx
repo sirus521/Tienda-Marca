@@ -9,6 +9,7 @@ import { LogoMark } from "@/components/brand/logo-mark";
 import { brand } from "@/config/brand";
 import { mainNav } from "@/config/nav";
 import { easeOutExpo } from "@/lib/motion/tokens";
+import { cartStore, useCartCount } from "@/lib/stores/cart-store";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -101,6 +102,9 @@ export function Header() {
 
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
+  const cartCount = useCartCount();
+  const openCart = cartStore((state) => state.open);
+
   return (
     <m.header
       animate={{ y: hidden && !prefersReducedMotion ? "-100%" : "0%" }}
@@ -143,18 +147,26 @@ export function Header() {
           {/* ---------------- Acciones ---------------- */}
           <div className="flex items-center gap-1">
             {/*
-              FASE 3: este enlace se convierte en el disparador del drawer del
-              carrito, y el contador se conecta al store de Zustand. Hoy apunta
-              a la página de carrito para que la navegación sea correcta y no
-              exista un botón muerto.
+              El disparador del drawer. Un botón y no un enlace porque su
+              acción es abrir el panel, no navegar: si fuera un `<a>` habría
+              que.preventDefault o fingir la navegación, y quien navega con
+              teclado o lector de pantalla oiría "enlace" para algo que no
+              lleva a otra página.
+
+              El contador viene del store. Devuelve 0 antes de hidratar, así que
+              el servidor y el primer render coinciden y no hay desajuste.
+
+              La página completa de la bolsa sigue siendo alcanzable desde el
+              pie del drawer ("Ir a la bolsa"), que es donde se espera encontrarla.
             */}
-            <Link
-              href="/carrito"
+            <button
+              type="button"
+              onClick={openCart}
               className="inline-flex h-11 items-center gap-2 px-3 font-mono text-label text-ink uppercase transition-colors duration-300 hover:bg-bone-2"
             >
               Bolsa
-              <span className="tabular-nums opacity-45">(0)</span>
-            </Link>
+              <span className="tabular-nums opacity-45">({cartCount})</span>
+            </button>
 
             {/* Botón del menú móvil. Visible solo por debajo de lg. */}
             <button
@@ -195,7 +207,7 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.28 }}
-            className="grain fixed inset-0 top-16 z-30 bg-bone lg:hidden"
+            className="fixed inset-0 top-16 z-30 bg-bone lg:hidden"
           >
             <nav aria-label="Navegación principal" className="container-ac pt-10 pb-16">
               <ul className="flex flex-col">
