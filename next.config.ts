@@ -1,14 +1,29 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+/**
+ * Habilita los bindings de Cloudflare (D1, R2) durante `next dev`.
+ *
+ * Se llama antes de exportar la configuración y NO necesita `await`. Levanta
+ * un proxy de plataforma con Wrangler que simula los bindings, de modo que
+ * `getCloudflareContext()` funciona en local sin desplegar. Es lo que evita
+ * tener que hacer un deploy para probar una consulta.
+ *
+ * Se activa solo con `wrangler.jsonc` presente: sin bindings declarados, la
+ * llamada únicamente añade ruido al arranque.
+ */
+initOpenNextCloudflareForDev();
 
 /**
  * Configuración de Next.js.
  *
  * Objetivo de despliegue: Cloudflare Workers vía `@opennextjs/cloudflare`.
  *
- * OJO — límite conocido: el plan gratuito de Workers permite un script de
- * hasta 3 MiB. Por eso este proyecto evita a propósito librerías de UI
- * pesadas y usa `LazyMotion` con `domAnimation` en lugar de importar todo
- * el bundle de animación. El tamaño real se mide antes de desplegar.
+ * NOTA — tamaño del script: el límite actual de un Worker es 64 MiB, no los
+ * 3 MiB que aún se citan en documentación vieja. Aun así este
+ * proyecto mantiene la disciplina de no cargar librerías de UI pesadas y usa
+ * `LazyMotion` con `domAnimation` en lugar de importar el bundle completo de
+ * animación. El tamaño real se mide antes de desplegar.
  */
 const nextConfig: NextConfig = {
   /* Modo estricto de React: detecta efectos mal escritos en desarrollo. */

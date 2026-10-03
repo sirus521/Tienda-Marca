@@ -1,0 +1,58 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "tienda-ac",
+  "compatibility_date": "2026-04-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+
+  /* Base de datos de la tienda. Catálogo, pedidos y autenticación. */
+  "d1_databases": [
+    {
+      "binding": "tienda_ac",
+      "database_name": "tienda-ac",
+      "database_id": "a023a854-2ea8-4306-a670-7492a2c996d6",
+      /* Las migraciones las genera drizzle-kit en `drizzle/` y las aplica
+         Wrangler usando la sesión OAuth de `wrangler login`. Así se evita el
+         driver `d1-http` de drizzle-kit, que además de la sesión exigiría un
+         token de API de Cloudflare con alcance de escritura en D1. */
+      "migrations_dir": "drizzle"
+    },
+    {
+      /* Caché de tags de ISR. Va en SU PROPIA base a propósito: son tablas
+         internas de Next.js (__NEXT_TAG_CACHE) y mezclarlas con el catálogo
+         en la misma base haría imposible razonar sobre los límites y sobre
+         un `wrangler d1 execute` de mantenimiento. */
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "tienda-ac-cache",
+      "database_id": "1cf38f01-e251-412f-a134-20e6390aa616"
+    }
+  ],
+
+  /* Caché incremental: guarda las páginas renderizadas por ISR. Sin este
+     binding, cada revalidación vuelve a renderizar desde cero y Workers no
+     tiene disco donde dejar el resultado entre peticiones. */
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "tienda-ac-opennext-cache"
+    }
+  ],
+
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  /* El Worker se invoca a sí mismo para la revalidación en segundo plano.
+     Sin esta referencia, ISR depende de que alguien toque la URL. */
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "tienda-ac"
+    }
+  ],
+
+  "observability": {
+    "enabled": true
+  }
+}

@@ -38,3 +38,7 @@ coverage/
 
 # Drizzle (artefactos locales)
 drizzle/meta/_journal.json.bak
+
+# SQL generado por scripts/seed-catalog.ts
+# Se deriva de src/lib/data/seed-products.ts en cada ejecución con `pnpm db:seed`.
+scripts/seed.sql

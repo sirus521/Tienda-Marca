@@ -48,6 +48,17 @@ const eslintConfig = [
       "no-console": ["warn", { allow: ["warn", "error"] }],
     },
   },
+
+  /* Los scripts de `scripts/` son herramientas de línea de comandos: ahí
+     escribir en la salida ESTÁ ES el producto. La regla existe para el código
+     de la aplicación, donde un `console.log` olvidado es ruido que se cuela en
+     el navegador de los clientes. */
+  {
+    files: ["scripts/**/*.ts"],
+    rules: {
+      "no-console": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
