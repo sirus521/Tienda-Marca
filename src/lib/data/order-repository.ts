@@ -254,6 +254,7 @@ export async function createOrder(
         folio,
         status: "new",
         deliveryMethod,
+        paymentMethod: "whatsapp",
         items,
         customer,
         totals,
@@ -324,7 +325,7 @@ function isStockViolation(error: unknown): boolean {
 }
 
 /** Deserializa el mapa de opciones de una variante. */
-function parseOptionValues(raw: string): Record<string, string> {
+export function parseOptionValues(raw: string): Record<string, string> {
   try {
     const parsed = JSON.parse(raw) as unknown;
     return parsed && typeof parsed === "object" ? (parsed as Record<string, string>) : {};

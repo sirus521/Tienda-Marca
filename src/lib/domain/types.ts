@@ -256,6 +256,7 @@ export type Order = {
   folio: string;
   status: OrderStatus;
   deliveryMethod: DeliveryMethod;
+  paymentMethod: PaymentMethod;
   items: OrderItem[];
   customer: OrderCustomer;
   totals: OrderTotals;
