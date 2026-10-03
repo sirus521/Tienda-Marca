@@ -1,5 +1,6 @@
 import type { Product } from "@/lib/domain/types";
 
+import { Reveal } from "@/components/motion/reveal";
 import { getFeaturedProducts } from "@/lib/data/catalog-repository";
 import { ProductCard } from "@/components/product/product-card";
 
@@ -39,9 +40,15 @@ export async function FeaturedProducts() {
   return (
     <section className="border-b border-line">
       <div className="container-ac py-20 lg:py-28">
+        {/* Los destacados de la portada SÍ llevan entrada escalonada
+            (70 ms): son la revelación de la marca, no el catálogo
+            completo. El listado de `/tienda` no la tiene — ver
+            `components/product/product-grid.tsx`. */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((product, index) => (
-            <ProductCard key={product.id} product={product} priority={index < 2} index={index} />
+            <Reveal key={product.id} delay={index * 0.07}>
+              <ProductCard product={product} priority={index < 2} index={index} />
+            </Reveal>
           ))}
         </div>
       </div>

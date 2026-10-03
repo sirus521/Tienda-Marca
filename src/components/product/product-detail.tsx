@@ -5,6 +5,7 @@ import type { Product } from "@/lib/domain/types";
 import Link from "next/link";
 import { useState } from "react";
 
+import { GlassCard } from "@/components/glass/glass-card";
 import { Price } from "@/components/product/price";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { VariantSelector } from "@/components/product/variant-selector";
@@ -108,78 +109,86 @@ export function ProductDetail({ product }: { product: Product }) {
 
         <p className="mt-4 max-w-md text-lead text-ash">{product.shortDescription}</p>
 
-        <Price
-          className="mt-7"
-          size="lg"
-          showDiscount
-          priceCents={variant?.priceCents ?? 0}
-          compareAtPriceCents={variant?.compareAtPriceCents ?? null}
-        />
+        {/* ---------------- Zona de compra sobre vidrio ----------------
+            La identidad (categoría, nombre, descripción) va directa
+            sobre papel; los controles que llevan a la compra descansan
+            sobre vidrio. La animación de entrada es CSS (cero JS) en
+            el envolvente, y el `backdrop-filter` en la tarjeta. */}
+        <div className="mt-8 animate-fade-up [animation-delay:150ms]">
+          <GlassCard contentClassName="p-6 lg:p-7">
+            <Price
+              size="lg"
+              showDiscount
+              priceCents={variant?.priceCents ?? 0}
+              compareAtPriceCents={variant?.compareAtPriceCents ?? null}
+            />
 
-        <VariantSelector
-          className="mt-9"
-          product={product}
-          selection={selection}
-          onChange={handleVariantChange}
-        />
+            <VariantSelector
+              className="mt-9"
+              product={product}
+              selection={selection}
+              onChange={handleVariantChange}
+            />
 
-        {/* ---------------- Cantidad y compra ---------------- */}
-        <div className="mt-9 flex flex-wrap items-stretch gap-3">
-          <QuantityStepper
-            value={quantity}
-            max={maxQuantity}
-            disabled={soldOut}
-            onChange={(next) => {
-              setQuantity(next);
-              setFeedback(null);
-            }}
-          />
+            {/* ---------------- Cantidad y compra ---------------- */}
+            <div className="mt-9 flex flex-wrap items-stretch gap-3">
+              <QuantityStepper
+                value={quantity}
+                max={maxQuantity}
+                disabled={soldOut}
+                onChange={(next) => {
+                  setQuantity(next);
+                  setFeedback(null);
+                }}
+              />
 
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            disabled={soldOut}
-            className={cn(buttonStyles({ variant: "primary", size: "lg" }), "flex-1")}
-          >
-            {soldOut ? "Sin existencias" : "Añadir a la bolsa"}
-          </button>
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={soldOut}
+                className={cn(buttonStyles({ variant: "primary", size: "lg" }), "flex-1")}
+              >
+                {soldOut ? "Sin existencias" : "Añadir a la bolsa"}
+              </button>
+            </div>
+
+            {/* ---------------- Estado del stock ---------------- */}
+            <div className="mt-5 min-h-5" role="status" aria-live="polite">
+              {feedback ? (
+                <p className="font-mono text-xs tracking-[0.14em] uppercase">
+                  {feedback}{" "}
+                  <Link href="/carrito" className="link-underline text-ink">
+                    Ver la bolsa
+                  </Link>
+                </p>
+              ) : null}
+
+              {!feedback && !soldOut && stock <= 5 ? (
+                /* Escasez real, con el número exacto. Un "¡últimas piezas!"
+                   genérico se lee como táctica de venta y pierde efecto; una
+                   cantidad concreta se lee como información. */
+                <p className="font-mono text-xs tracking-[0.14em] text-ash uppercase">
+                  Quedan {stock} {stock === 1 ? "pieza" : "piezas"} en esta talla
+                </p>
+              ) : null}
+
+              {!feedback && soldOut ? (
+                <p className="font-mono text-xs tracking-[0.14em] text-ash uppercase">
+                  Esta combinación está agotada — elige otra talla o color
+                </p>
+              ) : null}
+            </div>
+
+            {/* Si la variante elegida sí se puede comprar pero alguna otra
+                opción del producto no, conviene avisarlo: evita que el
+                cliente descubra al final que su talla no existe. */}
+            {!soldOut && variant?.sku ? (
+              <p className="mt-5 border-t border-line pt-4 font-mono text-xs text-ash-2">
+                SKU {variant.sku}
+              </p>
+            ) : null}
+          </GlassCard>
         </div>
-
-        {/* ---------------- Estado del stock ---------------- */}
-        <div className="mt-5 min-h-5" role="status" aria-live="polite">
-          {feedback ? (
-            <p className="font-mono text-xs tracking-[0.14em] uppercase">
-              {feedback}{" "}
-              <Link href="/carrito" className="link-underline text-ink">
-                Ver la bolsa
-              </Link>
-            </p>
-          ) : null}
-
-          {!feedback && !soldOut && stock <= 5 ? (
-            /* Escasez real, con el número exacto. Un "¡últimas piezas!"
-               genérico se lee como táctica de venta y pierde efecto; una
-               cantidad concreta se lee como información. */
-            <p className="font-mono text-xs tracking-[0.14em] text-ash uppercase">
-              Quedan {stock} {stock === 1 ? "pieza" : "piezas"} en esta talla
-            </p>
-          ) : null}
-
-          {!feedback && soldOut ? (
-            <p className="font-mono text-xs tracking-[0.14em] text-ash uppercase">
-              Esta combinación está agotada — elige otra talla o color
-            </p>
-          ) : null}
-        </div>
-
-        {/* Si la variante elegida sí se puede comprar pero alguna otra opción
-            del producto no, conviene avisarlo: evita que el cliente descubra
-            al final que su talla no existe. */}
-        {!soldOut && variant?.sku ? (
-          <p className="mt-6 border-t border-line pt-5 font-mono text-xs text-ash-2">
-            SKU {variant.sku}
-          </p>
-        ) : null}
       </div>
     </div>
   );

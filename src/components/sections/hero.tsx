@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { GlassCard } from "@/components/glass/glass-card";
 import { LogoMark } from "@/components/brand/logo-mark";
 import { buttonStyles } from "@/components/ui/button";
 import { brand, establishedLabel } from "@/config/brand";
@@ -61,21 +62,28 @@ export function Hero() {
           </h1>
         </div>
 
-        {/* ---------------- Cierre del hero ---------------- */}
-        <div className="mt-10 flex flex-col gap-8 lg:mt-14 lg:flex-row lg:items-start lg:justify-between">
-          <p className="max-w-md animate-fade-up text-lead text-ash [animation-delay:420ms]">
-            {brand.identity.description}
-          </p>
+        {/* ---------------- Cierre del hero ----------------
+            El vidrio es CSS puro: cero JavaScript, así que el
+            hero sigue pintándose en el primer frame. La animación
+            va en este envolvente y el `backdrop-filter` en la
+            tarjeta, nunca en el mismo nodo. */}
+        <div className="mt-10 animate-fade-up [animation-delay:420ms] lg:mt-14">
+          <GlassCard
+            className="max-w-3xl"
+            contentClassName="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between"
+          >
+            <p className="max-w-md text-lead text-ash">{brand.identity.description}</p>
 
-          <div className="flex animate-fade-up flex-wrap items-center gap-3 [animation-delay:520ms]">
-            <Link href="/tienda" className={buttonStyles({ variant: "primary", size: "lg" })}>
-              Ver la tienda
-            </Link>
-            {/* El botón secundario apuntaba a `/nosotros`, que todavía no
-                existe. Se retira junto con los enlaces de `nav.ts` para no
-                dejar un 404 en la primera pantalla; vuelve cuando la página
-                de historia esté construida. */}
-          </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link href="/tienda" className={buttonStyles({ variant: "primary", size: "lg" })}>
+                Ver la tienda
+              </Link>
+              {/* El botón secundario apuntaba a `/nosotros`, que todavía no
+                  existe. Se retira junto con los enlaces de `nav.ts` para no
+                  dejar un 404 en la primera pantalla; vuelve cuando la página
+                  de historia esté construida. */}
+            </div>
+          </GlassCard>
         </div>
       </div>
     </section>

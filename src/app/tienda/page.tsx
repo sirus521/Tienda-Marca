@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { GlassCard } from "@/components/glass/glass-card";
 import { ProductFilters } from "@/components/product/product-filters";
 import { ProductGrid } from "@/components/product/product-grid";
 import { buttonStyles } from "@/components/ui/button";
@@ -84,11 +85,13 @@ export default async function TiendaPage({
 
   return (
     <div className="pb-section">
-      {/* ---------------- Encabezado ---------------- */}
+      {/* ---------------- Encabezado ----------------
+          Entrada con CSS (`animate-fade-up`): cero JavaScript,
+          así el listado no espera a un paquete de animación. */}
       <header className="container-ac pt-16 pb-12">
-        <span className="eyebrow">Catálogo</span>
-        <h1 className="mt-5 text-display">La tienda</h1>
-        <p className="mt-6 max-w-lg text-lead text-ash">
+        <span className="animate-fade-up eyebrow">Catálogo</span>
+        <h1 className="mt-5 animate-fade-up text-display [animation-delay:100ms]">La tienda</h1>
+        <p className="mt-6 max-w-lg animate-fade-up text-lead text-ash [animation-delay:200ms]">
           Todo lo que está disponible ahora. Producción corta: cuando se agota una talla, tarda en
           volver.
         </p>
@@ -123,7 +126,7 @@ export default async function TiendaPage({
  */
 function EmptyState() {
   return (
-    <div className="border border-line px-6 py-20 text-center">
+    <GlassCard contentClassName="px-6 py-20 text-center">
       <p className="eyebrow">Sin resultados</p>
 
       <h2 className="mt-5 text-heading">No hay nada con esos filtros</h2>
@@ -138,6 +141,6 @@ function EmptyState() {
           Ver todo
         </Link>
       </div>
-    </div>
+    </GlassCard>
   );
 }

@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { z } from "zod";
 
+import { GlassCard } from "@/components/glass/glass-card";
+import { Reveal } from "@/components/motion/reveal";
 import { buttonStyles } from "@/components/ui/button";
 import { brand, isContactConfigured } from "@/config/brand";
 import { cn } from "@/lib/utils/cn";
@@ -87,54 +89,60 @@ export function NoticeList() {
           </div>
 
           <div className="lg:pt-10">
-            {configured ? (
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-4 sm:flex-row sm:items-start"
-              >
-                <div className="flex-1">
-                  <label htmlFor="telefono-avisos" className="block eyebrow">
-                    Teléfono
-                  </label>
-                  <input
-                    id="telefono-avisos"
-                    name="telefono"
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    placeholder="81 1234 5678"
-                    value={phone}
-                    onChange={(event) => {
-                      setPhone(event.target.value);
-                      if (status.kind !== "idle") setStatus({ kind: "idle" });
-                    }}
-                    /* `aria-invalid` + `aria-describedby` conectan el error con
-                       el campo para quien usa lector de pantalla. Sin esto el
-                       error es visible pero no audible. */
-                    aria-invalid={status.kind === "error"}
-                    aria-describedby="estado-avisos"
-                    className={cn(
-                      "mt-3 h-11 w-full rounded-sm border bg-transparent px-3 text-base",
-                      "transition-colors duration-300 placeholder:text-ash-2",
-                      status.kind === "error" ? "border-danger" : "border-line-strong",
-                    )}
-                  />
-                </div>
+            <Reveal>
+              {configured ? (
+                <GlassCard contentClassName="p-6 sm:p-7">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-4 sm:flex-row sm:items-start"
+                  >
+                    <div className="flex-1">
+                      <label htmlFor="telefono-avisos" className="block eyebrow">
+                        Teléfono
+                      </label>
+                      <input
+                        id="telefono-avisos"
+                        name="telefono"
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        placeholder="81 1234 5678"
+                        value={phone}
+                        onChange={(event) => {
+                          setPhone(event.target.value);
+                          if (status.kind !== "idle") setStatus({ kind: "idle" });
+                        }}
+                        /* `aria-invalid` + `aria-describedby` conectan el error con
+                           el campo para quien usa lector de pantalla. Sin esto el
+                           error es visible pero no audible. */
+                        aria-invalid={status.kind === "error"}
+                        aria-describedby="estado-avisos"
+                        className={cn(
+                          "mt-3 h-11 w-full rounded-sm border bg-transparent px-3 text-base",
+                          "transition-colors duration-300 placeholder:text-ash-2",
+                          status.kind === "error" ? "border-danger" : "border-line-strong",
+                        )}
+                      />
+                    </div>
 
-                <button type="submit" className={cn(buttonStyles({ size: "lg" }), "sm:mt-8")}>
-                  Avisarme
-                </button>
-              </form>
-            ) : (
-              /* Configuración pendiente. Se avisa en pantalla en lugar de
-                 mostrar un formulario que no lleva a ningún lado. Mismo
-                 criterio que el checkout. */
-              <p className="rounded-sm border border-line-strong bg-bone-2/60 p-5 text-sm text-ash">
-                Falta configurar el número de WhatsApp de la marca para activar esta sección. Se
-                define en <code className="font-mono text-xs">src/config/brand.ts</code> o desde
-                Ajustes en el panel.
-              </p>
-            )}
+                    <button type="submit" className={cn(buttonStyles({ size: "lg" }), "sm:mt-8")}>
+                      Avisarme
+                    </button>
+                  </form>
+                </GlassCard>
+              ) : (
+                /* Configuración pendiente. Se avisa en pantalla en lugar de
+                   mostrar un formulario que no lleva a ningún lado. Mismo
+                   criterio que el checkout. */
+                <GlassCard contentClassName="p-6">
+                  <p className="text-sm text-ash">
+                    Falta configurar el número de WhatsApp de la marca para activar esta sección. Se
+                    define en <code className="font-mono text-xs">src/config/brand.ts</code> o desde
+                    Ajustes en el panel.
+                  </p>
+                </GlassCard>
+              )}
+            </Reveal>
 
             {/* Región de estado: se anuncia sola al cambiar, sin mover el foco. */}
             <p
