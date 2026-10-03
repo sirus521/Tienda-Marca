@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+import { AdminGlassBackdrop } from "@/components/admin/glass-backdrop";
+import { GlassPanel } from "@/components/admin/glass-panel";
 import { logoutAction } from "@/app/admin/login/actions";
 import { Button } from "@/components/ui/button-client";
 import { getAdminSessionFromRequest } from "@/lib/server/admin-session";
@@ -24,45 +26,51 @@ export default async function AdminPanelLayout({ children }: { children: React.R
   }
 
   return (
-    <div className="container-ac pt-16 pb-section lg:pt-20">
-      <header className="flex items-start justify-between gap-6 pb-10">
-        <div>
-          <span className="eyebrow">AC · Panel</span>
-          <h1 className="mt-4 text-display">Administración</h1>
-          <p className="mt-4 max-w-lg text-lead text-ash">
-            Sesión como <span className="font-mono text-ink">{session.email}</span> ·{" "}
-            <span className="font-mono text-ash-2">{session.role}</span>
-          </p>
-          <nav className="mt-6 flex flex-wrap gap-4 font-mono text-xs tracking-[0.14em] text-ash uppercase">
-            <Link href="/admin" className="hover:text-ink">
-              Resumen
-            </Link>
-            <Link href="/admin/pedidos" className="hover:text-ink">
-              Pedidos
-            </Link>
-            <Link href="/admin/catalogo" className="hover:text-ink">
-              Catálogo
-            </Link>
-            <Link href="/admin/colecciones" className="hover:text-ink">
-              Colecciones
-            </Link>
-            <Link href="/admin/etiquetas" className="hover:text-ink">
-              Etiquetas
-            </Link>
-            <Link href="/admin/ajustes" className="hover:text-ink">
-              Ajustes
-            </Link>
-          </nav>
-        </div>
+    <div className="relative container-ac pt-16 pb-section lg:pt-20">
+      <AdminGlassBackdrop />
 
-        <form action={logoutAction}>
-          <Button variant="secondary" size="sm" type="submit">
-            Cerrar sesión
-          </Button>
-        </form>
-      </header>
+      <div className="relative">
+        <GlassPanel as="header" hover={false} className="mb-10" glassClassName="p-6 lg:p-10">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <span className="eyebrow">AC · Panel</span>
+              <h1 className="mt-4 text-display">Administración</h1>
+              <p className="mt-4 max-w-lg text-lead text-ash">
+                Sesión como <span className="font-mono text-ink">{session.email}</span> ·{" "}
+                <span className="font-mono text-ash-2">{session.role}</span>
+              </p>
+              <nav className="mt-6 flex flex-wrap gap-4 font-mono text-xs tracking-[0.14em] text-ash uppercase">
+                <Link href="/admin" className="hover:text-ink">
+                  Resumen
+                </Link>
+                <Link href="/admin/pedidos" className="hover:text-ink">
+                  Pedidos
+                </Link>
+                <Link href="/admin/catalogo" className="hover:text-ink">
+                  Catálogo
+                </Link>
+                <Link href="/admin/colecciones" className="hover:text-ink">
+                  Colecciones
+                </Link>
+                <Link href="/admin/etiquetas" className="hover:text-ink">
+                  Etiquetas
+                </Link>
+                <Link href="/admin/ajustes" className="hover:text-ink">
+                  Ajustes
+                </Link>
+              </nav>
+            </div>
 
-      <section>{children}</section>
+            <form action={logoutAction}>
+              <Button variant="secondary" size="sm" type="submit">
+                Cerrar sesión
+              </Button>
+            </form>
+          </div>
+        </GlassPanel>
+
+        <section className="relative">{children}</section>
+      </div>
     </div>
   );
 }

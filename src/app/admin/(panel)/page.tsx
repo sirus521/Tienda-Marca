@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+import { AdminStatCard } from "@/components/admin/stat-card";
+import { GlassPanel } from "@/components/admin/glass-panel";
+import { getCatalogStats } from "@/lib/data/admin-catalog-repository";
+import { getOrderStats } from "@/lib/data/admin-order-repository";
 import { getAdminSessionFromRequest } from "@/lib/server/admin-session";
 
 /**
@@ -11,17 +15,19 @@ import { getAdminSessionFromRequest } from "@/lib/server/admin-session";
  */
 export default async function AdminDashboardPage() {
   const session = await getAdminSessionFromRequest();
+  const orderStats = await getOrderStats();
+  const catalogStats = await getCatalogStats();
 
   const sections = [
     {
       href: "/admin/pedidos",
       title: "Pedidos",
-      description: "Revisa pedidos nuevos, confirmados y enviados.",
+      description: "Revisa pedidos, cambia estado y elimina registros.",
     },
     {
       href: "/admin/catalogo",
       title: "Catálogo",
-      description: "Edita stock, precio y estado de publicación.",
+      description: "Agrega, edita stock/precio y elimina productos.",
     },
     {
       href: "/admin/colecciones",
@@ -42,22 +48,49 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="flex flex-col gap-10">
-      <header>
+      <GlassPanel as="header" hover={false} glassClassName="p-6 lg:p-8">
         <h2 className="text-heading text-ink">Bienvenida{session ? `, ${session.name}` : ""}.</h2>
         <p className="mt-3 max-w-xl text-ash">
           Panel de operación de AC. Los cambios importantes quedan registrados en auditoría.
         </p>
-      </header>
+      </GlassPanel>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <AdminStatCard
+          label="Pedidos"
+          value={orderStats.total}
+          detail={`${orderStats.new} nuevos · ${orderStats.delivered} entregados`}
+          delay={0}
+        />
+        <AdminStatCard
+          label="Productos"
+          value={catalogStats.totalProducts}
+          detail={`${catalogStats.publishedProducts} publicados · ${catalogStats.draftProducts} borradores`}
+          delay={0.08}
+        />
+        <AdminStatCard
+          label="Variantes"
+          value={catalogStats.totalVariants}
+          detail={`${catalogStats.lowStockVariants} con stock bajo`}
+          delay={0.16}
+          accent="bronze"
+        />
+        <AdminStatCard
+          label="Cancelados"
+          value={orderStats.cancelled}
+          detail="Pedidos cancelados"
+          delay={0.24}
+          accent="bronze"
+        />
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {sections.map((section) => (
-          <Link
-            key={section.href}
-            href={section.href}
-            className="border border-line p-5 transition-colors hover:border-line-strong hover:bg-bone"
-          >
-            <h3 className="font-mono text-sm text-ink">{section.title}</h3>
-            <p className="mt-2 text-sm text-ash">{section.description}</p>
+        {sections.map((section, index) => (
+          <Link key={section.href} href={section.href} className="block h-full">
+            <GlassPanel delay={0.3 + index * 0.06} glassClassName="h-full p-5">
+              <h3 className="font-mono text-sm text-ink">{section.title}</h3>
+              <p className="mt-2 text-sm text-ash">{section.description}</p>
+            </GlassPanel>
           </Link>
         ))}
       </div>

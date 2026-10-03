@@ -60,6 +60,60 @@ export function staggerContainer(stagger: number = 0.06, delayChildren = 0): Var
   };
 }
 
+/* ==========================================================================
+   PANEL AC
+   ========================================================================== */
+
+/** Entrada de tarjeta de vidrio: sube, se asienta y se abre. */
+export const adminCardVariants: Variants = {
+  hidden: { opacity: 0, y: 28, scale: 0.985 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: DURATION.base, ease: easeOutExpo },
+  },
+};
+
+/** Escalonado para la cuadrícula de estadísticas. */
+export function adminStagger(stagger: number = 0.08): Variants {
+  return {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: stagger, delayChildren: 0.08 },
+    },
+  };
+}
+
+/** Deriva lenta de las formas detrás del vidrio. */
+export const adminDriftVariants: Variants = {
+  initial: { x: 0, y: 0 },
+  animate: {
+    x: [0, 42, -18, 0],
+    y: [0, -30, 22, 0],
+    transition: { duration: 20, repeat: Infinity, ease: easeInOutQuart },
+  },
+};
+
+/** Respiración del marcador de agua del monograma. */
+export const adminWatermarkVariants: Variants = {
+  initial: { y: 0, rotate: 0 },
+  animate: {
+    y: [0, -16, 0],
+    rotate: [0, 1.2, 0],
+    transition: { duration: 16, repeat: Infinity, ease: easeInOutQuart },
+  },
+};
+
+/** Pulso de la línea de acento en una tarjeta. */
+export const adminAccentVariants: Variants = {
+  initial: { scaleX: 0.28 },
+  animate: {
+    scaleX: [0.28, 1, 0.28],
+    transition: { duration: 4.5, repeat: Infinity, ease: easeInOutQuart },
+  },
+};
+
 /**
  * Revelado por máscara: el texto sube desde detrás de una línea.
  * `overflow: hidden` en el padre + desplazamiento del hijo al 100%.

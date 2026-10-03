@@ -261,6 +261,63 @@ export async function updateOrderStatus(input: {
   return { ok: true };
 }
 
+export type OrderStats = {
+  total: number;
+  new: number;
+  confirmed: number;
+  shipped: number;
+  delivered: number;
+  cancelled: number;
+};
+
+export async function getOrderStats(): Promise<OrderStats> {
+  const db = await getDb();
+  const rows = await db
+    .select({ status: orders.status, count: sql<number>`count(*)` })
+    .from(orders)
+    .groupBy(orders.status);
+
+  const count = Object.fromEntries(rows.map((row) => [row.status, Number(row.count)]));
+
+  return {
+    total: rows.reduce((sum, row) => sum + Number(row.count), 0),
+    new: count.new ?? 0,
+    confirmed: count.confirmed ?? 0,
+    shipped: count.shipped ?? 0,
+    delivered: count.delivered ?? 0,
+    cancelled: count.cancelled ?? 0,
+  };
+}
+
+export async function deleteOrder(
+  orderId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const db = await getDb();
+  const rows = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1);
+  const order = rows[0];
+  if (!order) return { ok: false, error: "El pedido no existe." };
+
+  /* Los pedidos nuevos/confirmados todavía no han salido de almacén: al
+     eliminarlos hay que devolver el stock que se descontó al crear. Los
+     enviados/entregados/cancelados ya gestionaron inventario en otro paso. */
+  const shouldRestoreStock = order.status === "new" || order.status === "confirmed";
+  const itemRows = shouldRestoreStock
+    ? await db.select().from(orderItems).where(eq(orderItems.orderId, orderId))
+    : [];
+
+  await db.batch([
+    db.delete(orders).where(eq(orders.id, orderId)),
+    ...itemRows.map((item) =>
+      db
+        .update(productVariants)
+        .set({ stock: sql`${productVariants.stock} + ${item.quantity}` })
+        .where(eq(productVariants.id, item.variantId)),
+    ),
+  ]);
+
+  return { ok: true };
+}
+
 /** Obtiene los slugs de productos tocados por un pedido, para revalidar. */
 export async function getProductSlugsForOrder(orderId: string): Promise<string[]> {
   const db = await getDb();

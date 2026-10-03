@@ -97,6 +97,9 @@
   --animate-marquee: marquee 40s linear infinite;
   --animate-marquee-reverse: marquee-reverse 40s linear infinite;
 
+  /* Vitrina del panel: rejilla de papel que se desvanece arriba. */
+  --grid-fade-mask: radial-gradient(ellipse 90% 65% at 50% 0%, black 0%, transparent 78%);
+
   /* Entrada de contenido. `both` mantiene el estado inicial antes de arrancar
      y el final después, sin salto. Con movimiento reducido, la media query
      global la completa al instante en lugar de congelarla — por eso el
@@ -234,6 +237,25 @@
   color: var(--color-ash);
 }
 
+/* Rejilla técnica para el panel: estructura, no luz. Se difumina
+   con máscara para no competir con los datos. */
+@utility bg-grid-fade {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--color-ink) 7%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-ink) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+  -webkit-mask-image: var(--grid-fade-mask);
+  mask-image: var(--grid-fade-mask);
+}
+
 /* Separador de sección: borde inferior uniforme usado en todas las
    secciones de contenido (Featured, Story, Values, Notice). */
 @utility section-divider {
@@ -284,6 +306,50 @@
   /* Bloqueo de scroll del documento (drawer de carrito, menú móvil). */
   .no-scroll {
     overflow: hidden;
+  }
+
+  /* ------------------------------------------------------------------
+     Vidrio del panel.
+     Translúcido a propósito: `backdrop-filter` solo se ve cuando hay
+     algo detrás. El fondo es papel + rejilla + formas suaves, nunca
+     glow. El borde es tinta al 12% y el realce interior es papel,
+     no luz brillante.
+     ------------------------------------------------------------------ */
+  .glass-ac {
+    border: 1px solid color-mix(in oklab, var(--color-ink) 12%, transparent);
+    background: color-mix(in oklab, var(--color-bone) 68%, transparent);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklab, var(--color-bone) 82%, transparent),
+      var(--shadow-lift);
+  }
+
+  /* Brillo cortado en diagonal: un reflejo de papel, no un halo. */
+  .glass-ac-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-ac-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.38;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-bone) 92%, transparent) 0%,
+      color-mix(in oklab, var(--color-bone) 20%, transparent) 28%,
+      transparent 46%
+    );
+  }
+
+  /* El contenido del vidrio queda sobre el reflejo, nunca debajo. */
+  .glass-ac-content {
+    position: relative;
+    z-index: 1;
   }
 }
 

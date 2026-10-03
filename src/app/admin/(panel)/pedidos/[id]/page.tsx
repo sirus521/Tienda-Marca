@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { getOrderById, getOrderStatusHistory } from "@/lib/data/admin-order-repository";
 import { updateOrderStatusAction } from "../actions";
+import { DeleteOrderButton } from "../delete-order-button";
 import { formatMoney } from "@/lib/domain/money";
 import type { OrderStatus } from "@/lib/domain/types";
 
@@ -55,12 +56,6 @@ export default async function PedidoDetailPage({
       </header>
 
       {error ? (
-        <p role="alert" className="border border-danger px-4 py-3 text-sm text-danger">
-          {error}
-        </p>
-      ) : null}
-
-      {ok ? (
         <p role="alert" className="border border-danger px-4 py-3 text-sm text-danger">
           {error}
         </p>
@@ -159,6 +154,7 @@ export default async function PedidoDetailPage({
             </h3>
             <form action={updateOrderStatusAction} className="flex flex-col gap-4">
               <input type="hidden" name="orderId" value={order.id} />
+              <input type="hidden" name="returnTo" value={`/admin/pedidos/${order.id}`} />
               <label className="flex flex-col gap-2 text-sm text-ash">
                 Estado
                 <select
@@ -191,6 +187,29 @@ export default async function PedidoDetailPage({
                 Guardar
               </button>
             </form>
+          </section>
+
+          <section className="border border-line p-5">
+            <h3 className="pb-4 font-mono text-xs tracking-[0.14em] text-ash uppercase">
+              Acciones rápidas
+            </h3>
+            <div className="flex flex-col gap-3">
+              {order.status !== "delivered" && order.status !== "cancelled" ? (
+                <form action={updateOrderStatusAction}>
+                  <input type="hidden" name="orderId" value={order.id} />
+                  <input type="hidden" name="status" value="delivered" />
+                  <input type="hidden" name="returnTo" value={`/admin/pedidos/${order.id}`} />
+                  <button
+                    type="submit"
+                    className="w-full border border-ink bg-ink px-4 py-3 font-mono text-xs tracking-[0.14em] text-bone uppercase transition-colors hover:bg-transparent hover:text-ink"
+                  >
+                    Marcar como entregado
+                  </button>
+                </form>
+              ) : null}
+
+              <DeleteOrderButton orderId={order.id} returnTo="/admin/pedidos" />
+            </div>
           </section>
 
           <section className="border border-line p-5">

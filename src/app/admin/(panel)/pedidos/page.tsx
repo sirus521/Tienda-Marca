@@ -1,6 +1,8 @@
 import Link from "next/link";
 
-import { listOrders } from "@/lib/data/admin-order-repository";
+import { getOrderStats, listOrders } from "@/lib/data/admin-order-repository";
+import { updateOrderStatusAction } from "./actions";
+import { DeleteOrderButton } from "./delete-order-button";
 import { formatMoney } from "@/lib/domain/money";
 import type { OrderStatus } from "@/lib/domain/types";
 
@@ -34,6 +36,7 @@ export default async function AdminPedidosPage({
       : "all";
 
   const orders = await listOrders({ status: filter });
+  const stats = await getOrderStats();
 
   return (
     <div>
@@ -56,6 +59,15 @@ export default async function AdminPedidosPage({
         </div>
       </div>
 
+      <div className="flex flex-wrap gap-3 pb-8 font-mono text-[11px] tracking-[0.14em] text-ash-2 uppercase">
+        <span>Total: {stats.total}</span>
+        <span>Nuevos: {stats.new}</span>
+        <span>Confirmados: {stats.confirmed}</span>
+        <span>Enviados: {stats.shipped}</span>
+        <span>Entregados: {stats.delivered}</span>
+        <span>Cancelados: {stats.cancelled}</span>
+      </div>
+
       {error ? (
         <p role="alert" className="mb-6 border border-danger px-4 py-3 text-sm text-danger">
           {error}
@@ -67,24 +79,41 @@ export default async function AdminPedidosPage({
       ) : (
         <div className="flex flex-col divide-y divide-line border border-line">
           {orders.map((order) => (
-            <Link
+            <div
               key={order.id}
-              href={`/admin/pedidos/${order.id}`}
-              className="flex items-center justify-between gap-4 px-4 py-4 transition-colors hover:bg-bone"
+              className="flex flex-col gap-4 px-4 py-4 transition-colors hover:bg-bone sm:flex-row sm:items-center sm:justify-between"
             >
-              <div className="min-w-0">
+              <Link href={`/admin/pedidos/${order.id}`} className="min-w-0 flex-1">
                 <p className="font-mono text-sm text-ink">{order.folio}</p>
                 <p className="truncate text-sm text-ash">{order.customerFullName}</p>
-              </div>
+              </Link>
 
-              <div className="text-right">
-                <p className="font-mono text-sm text-ink">{formatMoney(order.totalCents)}</p>
-                <p className="font-mono text-[11px] tracking-[0.14em] text-ash-2 uppercase">
-                  {order.itemCount} artículo{order.itemCount === 1 ? "" : "s"} ·{" "}
-                  {STATUS_LABELS[order.status]}
-                </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="text-right">
+                  <p className="font-mono text-sm text-ink">{formatMoney(order.totalCents)}</p>
+                  <p className="font-mono text-[11px] tracking-[0.14em] text-ash-2 uppercase">
+                    {order.itemCount} artículo{order.itemCount === 1 ? "" : "s"} ·{" "}
+                    {STATUS_LABELS[order.status]}
+                  </p>
+                </div>
+
+                {order.status !== "delivered" && order.status !== "cancelled" ? (
+                  <form action={updateOrderStatusAction} className="flex items-center gap-2">
+                    <input type="hidden" name="orderId" value={order.id} />
+                    <input type="hidden" name="status" value="delivered" />
+                    <input type="hidden" name="returnTo" value="/admin/pedidos" />
+                    <button
+                      type="submit"
+                      className="border border-ink bg-ink px-3 py-1.5 font-mono text-[11px] tracking-[0.14em] text-bone uppercase transition-colors hover:bg-transparent hover:text-ink"
+                    >
+                      Entregado
+                    </button>
+                  </form>
+                ) : null}
+
+                <DeleteOrderButton orderId={order.id} returnTo="/admin/pedidos" />
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
