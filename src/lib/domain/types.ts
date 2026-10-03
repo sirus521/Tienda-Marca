@@ -269,3 +269,56 @@ export type Order = {
   createdAt: string;
   updatedAt: string;
 };
+
+/* ===================================================================
+   ADMINISTRACIÓN
+   Tipos de dominio del panel. No son filas de D1: son lo que la
+   capa de presentación necesita, ya sin `password` ni nada que no
+   deba salir del servidor.
+   =================================================================== */
+
+/** Rol del admin. `owner` puede dar de baja cuentas; `editor` no. */
+export type AdminRole = "owner" | "editor";
+
+/**
+ * Identidad de un admin, sin credenciales.
+ *
+ * Deliberadamente no lleva hash de contraseña: si un tipo de dominio puede
+ * contenerlo, algún día uno lo va a pasar a un componente y se acaba en un
+ * `JSON.stringify` dentro de una respuesta.
+ */
+export type AdminUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: AdminRole;
+};
+
+/**
+ * Sesión resuelta.
+ *
+ * `sessionId` está porque cerrar sesión necesita borrar la fila, y poder hacerlo
+ * por id es más directo que por hash —que ya no está en la cookie—.
+ */
+export type AdminSession = {
+  sessionId: string;
+  adminId: string;
+  email: string;
+  name: string;
+  role: AdminRole;
+  /** ISO 8601. */
+  expiresAt: string;
+};
+
+/** Un movimiento de la bitácora, tal y como se muestra en pantalla. */
+export type AuditEntry = {
+  id: string;
+  userId: string | null;
+  action: string;
+  entity: string;
+  entityId: string | null;
+  /** JSON sin parsear. Quien lo muestra lo convierte. */
+  payload: string | null;
+  /** ISO 8601. */
+  createdAt: string;
+};
