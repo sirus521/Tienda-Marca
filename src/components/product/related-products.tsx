@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ScrollFloat } from "@/components/motion/recipes/scroll-float";
 import { ProductGrid } from "@/components/product/product-grid";
 import { buttonStyles } from "@/components/ui/button";
 import type { Product } from "@/lib/domain/types";
@@ -27,7 +28,7 @@ export function RelatedProducts({ products }: { products: readonly Product[] }) 
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <span className="eyebrow">Del catálogo</span>
-            <h2 className="mt-4 text-title">También te puede interesar</h2>
+            <ScrollFloat className="mt-4 text-title">También te puede interesar</ScrollFloat>
           </div>
 
           <Link href="/tienda" className={buttonStyles({ variant: "secondary" })}>

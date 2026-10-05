@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/motion/reveal";
+import { ScrollFloat } from "@/components/motion/recipes/scroll-float";
 
 /** Los cuatro compromisos. Cortos a propósito: una promesa larga no se lee. */
 const VALUES = [
@@ -41,7 +42,7 @@ export function Values() {
       <div className="container-ac py-section">
         <span className="eyebrow">03 / 04</span>
 
-        <h2 className="mt-4 text-title">Cuatro cosas que no negociamos</h2>
+        <ScrollFloat className="mt-4 text-title">Cuatro cosas que no negociamos</ScrollFloat>
 
         <ul className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
           {VALUES.map((value, index) => (

@@ -1,13 +1,11 @@
 /**
- * Identidad de marca — AC
+ * Identidad de marca — AC (Acces)
  * ============================================================================
  * ÚNICO lugar donde se define quién es la marca. Los componentes nunca
  * escriben strings de marca a mano: todo se lee desde aquí.
  *
- * La marca todavía no tiene nombre comercial, así que el wordmark es el
- * monograma `AC` más el lockup "EST. 2026" tomados del logo.
- * Cuando exista nombre definitivo: cambiar `name` y `legalName` en este
- * archivo y toda la tienda lo refleja, sin tocar componentes.
+ * La marca es ACCES: el monograma `AC` son las iniciales del nombre
+ * comercial y el lockup "EST. 2026" sale del logo.
  */
 
 /** Canales de cobro soportados. */
@@ -23,10 +21,10 @@ export const brand = {
   identity: {
     /** Monograma. Es el logo. */
     monogram: "AC",
-    /** Wordmark visible (provisional hasta que exista nombre). */
-    name: "AC",
+    /** Wordmark visible (nombre comercial). */
+    name: "Acces",
     /** Nombre para documentos legales y facturación. */
-    legalName: "AC",
+    legalName: "Acces",
     /** Año de fundación — se muestra como "EST. 2026". */
     foundedYear: 2026,
     /** Bajada de marca, usada en hero y metadatos. */
@@ -46,13 +44,13 @@ export const brand = {
     /** Solo dígitos, con código de país y sin "+". Ejemplo: "528112345678". */
     whatsapp: "527151447984",
     /** Mensaje que se precarga al abrir la conversación. */
-    whatsappGreeting: "¡Hola AC! Vengo de la tienda en línea.",
+    whatsappGreeting: "¡Hola Acces! Vengo de la tienda en línea.",
     /** Correo de atención a clientes. */
     email: "",
     /** Usuario de Instagram, sin "@". */
     instagram: "",
     /** Origen, usado en páginas legales y de envíos. */
-    location: "Monterrey, Nuevo León, México",
+    location: "Zitácuaro, Michoacán, México",
   },
 
   /* ---------------------------------------------------------------- */

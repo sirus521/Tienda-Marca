@@ -61,7 +61,7 @@ export function ProductCard({ product, priority = false, index = 0, className }:
     : null;
 
   return (
-    <article className={cn("group relative", className)}>
+    <article className={cn("group lift-card relative bg-paper", className)}>
       <Link href={`/producto/${product.slug}`} className="block">
         {/* ---------------- Imagen ---------------- */}
         <div className="relative aspect-4/5 w-full overflow-hidden bg-bone-2">

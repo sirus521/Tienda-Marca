@@ -351,6 +351,157 @@
     position: relative;
     z-index: 1;
   }
+
+  /* ------------------------------------------------------------------
+     Receta: KineticHeadline
+     Palabras/letras entran escalonadas. Preset vía `data-kinetic-anim`
+     (.k-anim-* lo pone el enhancer de cliente). Solo transform/opacity/
+     filter. En reducido el texto sale de una vez. */
+  [data-kinetic] {
+    display: inline-block;
+  }
+
+  [data-kinetic] .k-unit {
+    display: inline-block;
+    opacity: 0;
+    transition:
+      opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+      filter 520ms ease-out;
+    transition-delay: var(--k-delay, 0ms);
+    will-change: opacity, transform, filter;
+  }
+  [data-kinetic].is-in .k-unit {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  [data-kinetic] .k-space {
+    display: inline-block;
+    width: 0.28em;
+  }
+
+  .k-anim-rise .k-unit {
+    transform: translateY(0.5em);
+  }
+  .k-anim-drop .k-unit {
+    transform: translateY(-0.5em);
+  }
+  .k-anim-fade .k-unit {
+    transform: none;
+  }
+  .k-anim-slide .k-unit {
+    transform: translateX(0.6em);
+  }
+  .k-anim-pop .k-unit {
+    transform: scale(0.4);
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .k-anim-blur .k-unit {
+    transform: none;
+    filter: blur(10px);
+  }
+  .k-anim-flip .k-unit {
+    transform: rotateX(-90deg);
+    transform-origin: bottom;
+  }
+  .k-anim-spin .k-unit {
+    transform: rotate(-18deg) scale(0.6);
+  }
+  .k-anim-typewriter .k-unit {
+    transform: none;
+    transition-duration: 1ms;
+  }
+  .k-anim-wave .k-unit {
+    opacity: 1;
+    animation: kh-wave 1.8s ease-in-out infinite;
+    animation-delay: var(--k-delay, 0ms);
+  }
+  @keyframes kh-wave {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-0.22em);
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     Receta: ScrollFloat
+     Cada palabra flota al entrar en viewport. Solo transform/opacity. */
+  [data-scroll-float] .sf-w {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--sf-d, 0ms);
+  }
+  [data-scroll-float].in .sf-w {
+    opacity: 1;
+    transform: none;
+  }
+  [data-scroll-float] .sf-sp {
+    display: inline-block;
+    width: 0.28em;
+  }
+
+  /* ------------------------------------------------------------------
+     Receta: magnetic-button (wrapper). El CTA conserva buttonStyles;
+     solo el wrapper `.magnetic` lleva la transición del transform. */
+  .magnetic {
+    transition: transform 180ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: transform;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .magnetic:active {
+    transform: scale(0.97);
+  }
+
+  /* ------------------------------------------------------------------
+     Receta: card-lift-hover. Puro CSS. */
+  .lift-card {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgb(20 18 14 / 0.06);
+    transition:
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .lift-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 32px rgb(20 18 14 / 0.13);
+  }
+  .lift-card:active {
+    transform: translateY(-2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-kinetic] .k-unit {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none;
+      animation: none !important;
+    }
+    [data-scroll-float] .sf-w {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .magnetic {
+      transition: none;
+    }
+    .lift-card,
+    .lift-card:hover,
+    .lift-card:active {
+      transform: none;
+      transition: box-shadow 120ms ease;
+    }
+  }
 }
 
 /* ==========================================================================

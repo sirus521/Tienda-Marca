@@ -5,6 +5,7 @@ import { z } from "zod";
 
 import { GlassCard } from "@/components/glass/glass-card";
 import { Reveal } from "@/components/motion/reveal";
+import { ScrollFloat } from "@/components/motion/recipes/scroll-float";
 import { buttonStyles } from "@/components/ui/button";
 import { brand, isContactConfigured } from "@/config/brand";
 import { cn } from "@/lib/utils/cn";
@@ -81,7 +82,7 @@ export function NoticeList() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-24">
           <div>
             <span className="eyebrow">04 / 04</span>
-            <h2 className="mt-4 text-title">Avisos de nuevos lotes</h2>
+            <ScrollFloat className="mt-4 text-title">Avisos de nuevos lotes</ScrollFloat>
             <p className="mt-5 max-w-md text-ash">
               Se produce poco y se repone sin calendario. Déjanos tu teléfono y te avisamos cuando
               entre un lote nuevo, antes de que salga a la tienda.

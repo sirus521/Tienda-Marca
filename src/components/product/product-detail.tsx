@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { GlassCard } from "@/components/glass/glass-card";
+import { Magnetic } from "@/components/motion/recipes/magnetic-button";
 import { Price } from "@/components/product/price";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { VariantSelector } from "@/components/product/variant-selector";
@@ -142,14 +143,16 @@ export function ProductDetail({ product }: { product: Product }) {
                 }}
               />
 
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                disabled={soldOut}
-                className={cn(buttonStyles({ variant: "primary", size: "lg" }), "flex-1")}
-              >
-                {soldOut ? "Sin existencias" : "Añadir a la bolsa"}
-              </button>
+              <Magnetic className="min-w-0 flex-1">
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={soldOut}
+                  className={cn(buttonStyles({ variant: "primary", size: "lg" }), "w-full")}
+                >
+                  {soldOut ? "Sin existencias" : "Añadir a la bolsa"}
+                </button>
+              </Magnetic>
             </div>
 
             {/* ---------------- Estado del stock ---------------- */}

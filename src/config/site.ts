@@ -12,7 +12,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
 
   /** Zona horaria de operación. Define los cortes de "ventas de la semana". */
-  timezone: "America/Monterrey",
+  timezone: "America/Mexico_City",
 
   /** Imagen de Open Graph por defecto. Se reemplaza por la real en Fase 8. */
   defaultOgImage: "/og/default.jpg",
@@ -28,7 +28,7 @@ export const site = {
     "playera oversize",
     "oversize tee",
     "ropa oversize México",
-    "streetwear Monterrey",
+    "streetwear Michoacán",
     "playeras de algodón pesado",
   ],
 
