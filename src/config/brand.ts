@@ -1,5 +1,5 @@
 /**
- * Identidad de marca — AC (Acces)
+ * Identidad de marca — AC (Access)
  * ============================================================================
  * ÚNICO lugar donde se define quién es la marca. Los componentes nunca
  * escriben strings de marca a mano: todo se lee desde aquí.
@@ -22,9 +22,9 @@ export const brand = {
     /** Monograma. Es el logo. */
     monogram: "AC",
     /** Wordmark visible (nombre comercial). */
-    name: "Acces",
+    name: "Access",
     /** Nombre para documentos legales y facturación. */
-    legalName: "Acces",
+    legalName: "Access",
     /** Año de fundación — se muestra como "EST. 2026". */
     foundedYear: 2026,
     /** Bajada de marca, usada en hero y metadatos. */
@@ -44,7 +44,7 @@ export const brand = {
     /** Solo dígitos, con código de país y sin "+". Ejemplo: "528112345678". */
     whatsapp: "527151447984",
     /** Mensaje que se precarga al abrir la conversación. */
-    whatsappGreeting: "¡Hola Acces! Vengo de la tienda en línea.",
+    whatsappGreeting: "¡Hola Access! Vengo de la tienda en línea.",
     /** Correo de atención a clientes. */
     email: "",
     /** Usuario de Instagram, sin "@". */
