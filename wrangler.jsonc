@@ -49,7 +49,7 @@
      por la que muestra `wrangler r2 bucket create ac-product-images` tras
      hacer el bucket público. */
   "vars": {
-    "R2_PUBLIC_URL": "https://pub-PLACEHOLDER.r2.dev"
+    "R2_PUBLIC_URL": "https://pub-b8c48b504a714097b4866e4839ce868d.r2.dev"
   },
 
   "assets": {
