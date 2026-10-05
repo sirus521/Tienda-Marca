@@ -45,6 +45,7 @@ export const metadata: Metadata = {
 function parseFilters(searchParams: Record<string, string | string[] | undefined>): {
   talla?: string;
   etiqueta?: string;
+  q?: string;
   orden: ProductSort;
 } {
   const first = (value: string | string[] | undefined): string | undefined =>
@@ -56,8 +57,7 @@ function parseFilters(searchParams: Record<string, string | string[] | undefined
   return {
     talla: first(searchParams.talla),
     etiqueta: first(searchParams.etiqueta),
-    /* Nunca se confía en la URL: si el valor no está en la lista, se usa el
-       orden por defecto en lugar de propagar basura a la consulta. */
+    q: first(searchParams.q),
     orden: SORTS.includes(orden as ProductSort) ? (orden as ProductSort) : "recientes",
   };
 }
@@ -77,6 +77,7 @@ export default async function TiendaPage({
     listProducts({
       size: filters.talla,
       tag: filters.etiqueta,
+      q: filters.q,
       sort: filters.orden,
     }),
     listAvailableSizes(),
@@ -96,6 +97,27 @@ export default async function TiendaPage({
           volver.
         </p>
       </header>
+
+      {/* ---------------- Buscador ----------------
+          GET a `/tienda`: la búsqueda queda en la URL y el servidor ya
+          devuelve el HTML filtrado. Sin JavaScript implicado. */}
+      <div className="container-ac pt-4 pb-2">
+        <form method="GET" action="/tienda" className="flex gap-3">
+          <input
+            name="q"
+            defaultValue={filters.q ?? ""}
+            placeholder="Buscar por nombre o etiqueta…"
+            aria-label="Buscar"
+            className="w-full max-w-sm border border-line bg-transparent px-4 py-3 text-ink placeholder:text-ash-2"
+          />
+          <button
+            type="submit"
+            className="border border-ink bg-ink px-5 py-3 font-mono text-xs tracking-[0.14em] text-bone uppercase transition-colors hover:bg-transparent hover:text-ink"
+          >
+            Buscar
+          </button>
+        </form>
+      </div>
 
       <ProductFilters
         current={{ talla: filters.talla, etiqueta: filters.etiqueta, orden: filters.orden }}

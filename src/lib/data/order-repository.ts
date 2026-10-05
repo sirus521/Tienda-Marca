@@ -68,6 +68,7 @@ export async function createOrder(
   lines: readonly CartLine[],
   customer: OrderCustomer,
   deliveryMethod: DeliveryMethod,
+  opts: { discountCents?: number } = {},
 ): Promise<CreateOrderResult> {
   const db = await getDb();
 
@@ -174,7 +175,7 @@ export async function createOrder(
      cómo se suma un total. El envío todavía no tiene tarifa calculada —se
      acuerda en el chat—, y por eso el segundo argumento es 0 explícito y no una
      regla escondida aquí. */
-  const totals = computeTotals(items);
+  const totals = computeTotals(items, 0, opts.discountCents ?? 0);
 
   const now = new Date().toISOString();
   const orderId = crypto.randomUUID();

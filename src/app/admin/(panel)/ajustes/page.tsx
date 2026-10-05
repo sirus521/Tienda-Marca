@@ -1,5 +1,6 @@
 import { listRecentAuditLogs, readSettings } from "@/lib/data/admin-repository";
-import { updateSettingsAction } from "./actions";
+import { getBrandConfig } from "@/lib/config/brand-runtime";
+import { saveBrandSettingsAction, updateSettingsAction } from "./actions";
 
 /**
  * Ajustes y auditoría
@@ -15,6 +16,7 @@ export default async function AdminAjustesPage({
   const { ok, error } = await searchParams;
   const settings = await readSettings<Record<string, unknown>>({});
   const auditLogs = await listRecentAuditLogs(25);
+  const brandConfig = await getBrandConfig();
 
   return (
     <div className="flex flex-col gap-10">
@@ -81,6 +83,80 @@ export default async function AdminAjustesPage({
           >
             Guardar
           </button>
+        </form>
+      </section>
+
+      <section className="border border-line p-5">
+        <h3 className="pb-4 font-mono text-xs tracking-[0.14em] text-ash uppercase">
+          Marca y contacto
+        </h3>
+        <p className="mb-4 text-sm text-ash-2">
+          Estos datos se usan en el pie, la lista de avisos y el mensaje de WhatsApp.
+        </p>
+        <form action={saveBrandSettingsAction} className="grid gap-4 sm:grid-cols-2">
+          <label className="flex flex-col gap-1 text-xs text-ash">
+            WhatsApp
+            <input
+              name="whatsapp"
+              defaultValue={brandConfig.contact.whatsapp}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-ash">
+            Saludo de WhatsApp
+            <input
+              name="whatsappGreeting"
+              defaultValue={brandConfig.contact.whatsappGreeting}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-ash">
+            Correo
+            <input
+              name="email"
+              defaultValue={brandConfig.contact.email}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-ash">
+            Instagram
+            <input
+              name="instagram"
+              defaultValue={brandConfig.contact.instagram}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-ash sm:col-span-2">
+            Ubicación
+            <input
+              name="location"
+              defaultValue={brandConfig.contact.location}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-ash">
+            Envío gratis desde (centavos)
+            <input
+              name="freeShippingThresholdCents"
+              type="number"
+              min="0"
+              defaultValue={brandConfig.commerce.freeShippingThresholdCents}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <label className="flex flex-col gap-1 text-xs text-ash">
+            Prefijo de pedido
+            <input
+              name="orderPrefix"
+              defaultValue={brandConfig.commerce.orderPrefix}
+              className="border border-line bg-transparent px-3 py-2.5 text-ink"
+            />
+          </label>
+          <div className="flex items-end sm:col-span-2">
+            <button className="border border-ink bg-ink px-4 py-2.5 font-mono text-xs tracking-[0.14em] text-bone uppercase transition-colors hover:bg-transparent hover:text-ink">
+              Guardar marca
+            </button>
+          </div>
         </form>
       </section>
 

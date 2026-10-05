@@ -65,6 +65,8 @@ export type ProductQuery = {
   featuredOnly?: boolean;
   /** Disponible en esa talla y con stock. */
   size?: string;
+  /** Búsqueda por nombre, descripción o etiqueta. */
+  q?: string;
   /** Orden de los resultados. Por defecto, lo más reciente primero. */
   sort?: ProductSort;
   limit?: number;
@@ -271,7 +273,7 @@ const published = eq(products.status, "published");
 
 /** Lista productos publicados, con filtros opcionales. */
 export async function listProducts(query: ProductQuery = {}): Promise<Product[]> {
-  const { category, tag, featuredOnly = false, size, sort = "recientes", limit } = query;
+  const { category, tag, featuredOnly = false, size, q, sort = "recientes", limit } = query;
 
   const conditions: SQL[] = [published];
 
@@ -279,6 +281,17 @@ export async function listProducts(query: ProductQuery = {}): Promise<Product[]>
   if (featuredOnly) conditions.push(eq(products.isFeatured, true));
 
   let result = await loadProducts(and(...conditions));
+
+  if (q) {
+    const needle = q.trim().toLowerCase();
+    if (needle) {
+      result = result.filter((product) =>
+        [product.name, product.description, product.shortDescription, ...product.tags]
+          .filter(Boolean)
+          .some((text) => text.toLowerCase().includes(needle)),
+      );
+    }
+  }
 
   /* Estos dos filtros se aplican en memoria porque dependen de datos que viven
      en las filas hijas: la etiqueta está en el JSON de `products.tags` y el

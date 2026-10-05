@@ -85,16 +85,24 @@ export type PricedLine = {
  * decide cuánto aplicar (hoy, cero y el envío se acuerda por WhatsApp). Cuando
  * existan las tarifas, este mismo punto de entrada las recibe.
  */
-export function computeTotals(lines: readonly PricedLine[], shippingCents = 0): OrderTotals {
+export function computeTotals(
+  lines: readonly PricedLine[],
+  shippingCents = 0,
+  discountCents = 0,
+): OrderTotals {
   const subtotalCents = sumCents(lines.map((line) => line.unitPriceCents * line.quantity));
-  const discountCents = 0;
   const safeShipping = Number.isFinite(shippingCents) ? Math.max(0, Math.round(shippingCents)) : 0;
+  const safeDiscount =
+    Number.isFinite(discountCents) && discountCents > 0
+      ? Math.max(0, Math.round(discountCents))
+      : 0;
+  const appliedDiscount = Math.min(safeDiscount, subtotalCents);
 
   return {
     subtotalCents,
     shippingCents: safeShipping,
-    discountCents,
-    totalCents: subtotalCents - discountCents + safeShipping,
+    discountCents: appliedDiscount,
+    totalCents: subtotalCents - appliedDiscount + safeShipping,
   };
 }
 
@@ -192,10 +200,13 @@ export type CheckoutInput = z.infer<typeof checkoutSchema>;
    Markdown—: se lee igual en el chat de WhatsApp que en el bloque de notas del
    teléfono, y `wa.me` no interpreta nada.
    ============================================================================ */
-export function buildWhatsappMessage(order: Order): string {
+export function buildWhatsappMessage(
+  order: Order,
+  config: { contact: { whatsapp: string; whatsappGreeting: string } } = brand,
+): string {
   const lines: string[] = [];
 
-  lines.push(brand.contact.whatsappGreeting);
+  lines.push(config.contact.whatsappGreeting);
   lines.push("");
   lines.push(`Pedido ${order.folio}`);
   lines.push("─".repeat(28));
@@ -211,6 +222,9 @@ export function buildWhatsappMessage(order: Order): string {
 
   lines.push("─".repeat(28));
   lines.push(`Subtotal: ${formatMoney(order.totals.subtotalCents)}`);
+  if (order.totals.discountCents > 0) {
+    lines.push(`Descuento: -${formatMoney(order.totals.discountCents)}`);
+  }
 
   /* El envío todavía no tiene tarifa. Decirlo es mejor que omitirlo: si la
      línea no aparece, el total se lee como el costo final de la prenda. */
@@ -252,8 +266,11 @@ export const DELIVERY_LABELS = {
  * sin codificar rompería la URL. Un pedido de muestra ya lo confirma: el
  * nombre del producto contiene `—`.
  */
-export function orderWhatsappUrl(order: Order): string {
-  return `https://wa.me/${brand.contact.whatsapp}?text=${encodeURIComponent(
-    buildWhatsappMessage(order),
+export function orderWhatsappUrl(
+  order: Order,
+  config: { contact: { whatsapp: string; whatsappGreeting: string } } = brand,
+): string {
+  return `https://wa.me/${config.contact.whatsapp}?text=${encodeURIComponent(
+    buildWhatsappMessage(order, config),
   )}`;
 }

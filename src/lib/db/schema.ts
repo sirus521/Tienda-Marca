@@ -214,6 +214,31 @@ export const productTags = sqliteTable(
 );
 
 /* ------------------------------------------------------------------
+   COUPONS
+   ------------------------------------------------------------------ */
+
+export const coupons = sqliteTable(
+  "coupons",
+  {
+    id: text("id").primaryKey(),
+    code: text("code").notNull().unique(),
+    /** "percent" = porcentaje del subtotal; "fixed" = centavos fijos. */
+    type: text("type", { enum: ["percent", "fixed"] })
+      .notNull()
+      .default("percent"),
+    value: integer("value").notNull(),
+    active: integer("active", { mode: "boolean" }).notNull().default(true),
+    expiresAt: text("expires_at"),
+    createdAt: text("created_at")
+      .notNull()
+      .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ','now'))`),
+  },
+  (table) => ({
+    codeIdx: index("coupons_code_idx").on(table.code),
+  }),
+);
+
+/* ------------------------------------------------------------------
    COLLECTIONS
    ------------------------------------------------------------------ */
 export const collections = sqliteTable(

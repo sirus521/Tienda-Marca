@@ -4,6 +4,10 @@ import { MarqueeBand } from "@/components/sections/marquee-band";
 import { NoticeList } from "@/components/sections/notice-list";
 import { Story } from "@/components/sections/story";
 import { Values } from "@/components/sections/values";
+import { JsonLd } from "@/components/seo/json-ld";
+import { brand } from "@/config/brand";
+import { site } from "@/config/site";
+import { getBrandConfig } from "@/lib/config/brand-runtime";
 
 /**
  * Portada
@@ -30,15 +34,41 @@ import { Values } from "@/components/sections/values";
  */
 export const revalidate = 300;
 
-export default function HomePage() {
+const orgJsonLd: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: brand.identity.name,
+  description: brand.identity.description,
+  url: site.url,
+  logo: `${site.url}/og/default.jpg`,
+};
+
+const websiteJsonLd: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: brand.identity.name,
+  url: site.url,
+  inLanguage: "es-MX",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${site.url}/tienda?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+
+export default async function HomePage() {
+  const brandConfig = await getBrandConfig();
+
   return (
     <>
+      <JsonLd data={orgJsonLd} />
+      <JsonLd data={websiteJsonLd} />
       <Hero />
       <FeaturedProducts />
       <MarqueeBand />
       <Story />
       <Values />
-      <NoticeList />
+      <NoticeList whatsapp={brandConfig.contact.whatsapp} storeName={brandConfig.identity.name} />
     </>
   );
 }

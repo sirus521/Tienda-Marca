@@ -5,7 +5,9 @@ import { revalidatePath } from "next/cache";
 import type { CheckoutState } from "@/app/checkout/state";
 import { listProductVariants } from "@/lib/data/catalog-repository";
 import { createOrder } from "@/lib/data/order-repository";
+import { lookupCoupon } from "@/lib/data/coupon-repository";
 import { checkoutSchema, orderWhatsappUrl } from "@/lib/domain/order";
+import { getBrandConfig } from "@/lib/config/brand-runtime";
 import type { OrderCustomer } from "@/lib/domain/types";
 
 /**
@@ -80,6 +82,21 @@ export async function submitOrderAction(
 
   const { deliveryMethod, customer, lines } = parsed.data;
 
+  /* Cupón opcional: se valida en el servidor y el descuento se calcula con los
+     precios reales (la fuente de verdad), no los del navegador. */
+  const couponCodeRaw = formData.get("couponCode");
+  const coupon =
+    typeof couponCodeRaw === "string" && couponCodeRaw.trim() !== ""
+      ? await lookupCoupon(couponCodeRaw)
+      : null;
+
+  if (typeof couponCodeRaw === "string" && couponCodeRaw.trim() !== "" && !coupon) {
+    return {
+      status: "error",
+      message: "Ese cupón no es válido o expiró. Revísalo e intenta de nuevo.",
+    };
+  }
+
   /* ---------------------------------------------------------------------
      2. RECUPERAR LOS ARTÍCULOS DESDE LA BASE
      --------------------------------------------------------------------- */
@@ -113,10 +130,22 @@ export async function submitOrderAction(
     notes: customer.notes,
   };
 
+  const subtotalCents = linesWithDetails.reduce(
+    (sum, line) => sum + line.unitPriceCents * line.quantity,
+    0,
+  );
+  const discountCents = coupon
+    ? coupon.type === "percent"
+      ? Math.round((subtotalCents * coupon.value) / 100)
+      : coupon.value
+    : 0;
+
   /* ---------------------------------------------------------------------
      3. ESCRIBIR
      --------------------------------------------------------------------- */
-  const result = await createOrder(linesWithDetails, orderCustomer, deliveryMethod);
+  const result = await createOrder(linesWithDetails, orderCustomer, deliveryMethod, {
+    discountCents,
+  });
 
   if (!result.ok) {
     /* `createOrder` ya devuelve un mensaje pensado para la persona que compra:
@@ -145,7 +174,7 @@ export async function submitOrderAction(
   return {
     status: "success",
     folio: result.order.folio,
-    whatsappUrl: orderWhatsappUrl(result.order),
+    whatsappUrl: orderWhatsappUrl(result.order, await getBrandConfig()),
     message: "Pedido registrado.",
   };
 }

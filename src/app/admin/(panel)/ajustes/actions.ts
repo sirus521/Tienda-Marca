@@ -48,3 +48,40 @@ export async function updateSettingsAction(formData: FormData): Promise<void> {
   revalidatePath("/admin/ajustes");
   redirect(`${returnTo}?ok=${encodeURIComponent("Ajuste guardado.")}`);
 }
+
+/**
+ * Guarda los ajustes de marca editables (WhatsApp, saludo, correo, Instagram,
+ * ubicación, envío gratis y prefijo de pedido) bajo la clave `brand`.
+ */
+export async function saveBrandSettingsAction(formData: FormData): Promise<void> {
+  const session = await getAdminSessionFromRequest();
+  if (!session) redirect("/admin/login");
+
+  const whatsapp = formData.get("whatsapp");
+  const whatsappGreeting = formData.get("whatsappGreeting");
+  const email = formData.get("email");
+  const instagram = formData.get("instagram");
+  const location = formData.get("location");
+  const freeShippingRaw = formData.get("freeShippingThresholdCents");
+  const orderPrefix = formData.get("orderPrefix");
+
+  const freeShipping = Number(freeShippingRaw);
+  const freeShippingThresholdCents =
+    Number.isFinite(freeShipping) && freeShipping >= 0 ? freeShipping : undefined;
+
+  await writeSettings("brand", {
+    whatsapp: typeof whatsapp === "string" ? whatsapp.trim() : "",
+    whatsappGreeting: typeof whatsappGreeting === "string" ? whatsappGreeting.trim() : "",
+    email: typeof email === "string" ? email.trim() : "",
+    instagram: typeof instagram === "string" ? instagram.trim() : "",
+    location: typeof location === "string" ? location.trim() : "",
+    ...(freeShippingThresholdCents !== undefined ? { freeShippingThresholdCents } : {}),
+    orderPrefix:
+      typeof orderPrefix === "string" && orderPrefix.trim() !== "" ? orderPrefix.trim() : undefined,
+  });
+
+  revalidatePath("/admin/ajustes");
+  revalidatePath("/");
+  revalidatePath("/tienda");
+  redirect(`/admin/ajustes?ok=${encodeURIComponent("Marca guardada.")}`);
+}

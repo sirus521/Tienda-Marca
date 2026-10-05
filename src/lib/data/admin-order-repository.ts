@@ -1,4 +1,4 @@
-import { and, desc, eq, inArray, sql, type SQL } from "drizzle-orm";
+import { and, desc, eq, inArray, like, or, sql, type SQL } from "drizzle-orm";
 
 import { getDb } from "@/lib/db/client";
 import { orderItems, orderStatusHistory, orders, productVariants, products } from "@/lib/db/schema";
@@ -46,15 +46,29 @@ export async function listOrders(
   input: {
     status?: OrderStatus | "all";
     limit?: number;
+    offset?: number;
+    q?: string;
   } = {},
 ): Promise<OrderSummary[]> {
   const db = await getDb();
   const limit = input.limit ?? 50;
+  const offset = typeof input.offset === "number" && input.offset >= 0 ? input.offset : 0;
 
   const conditions: SQL[] = [];
 
   if (input.status && input.status !== "all") {
     conditions.push(eq(orders.status, input.status));
+  }
+
+  if (input.q && input.q.trim() !== "") {
+    const likeStr = `%${input.q.trim()}%`;
+    conditions.push(
+      or(
+        like(orders.folio, likeStr),
+        like(orders.customerFullName, likeStr),
+        like(orders.customerPhone, likeStr),
+      )!,
+    );
   }
 
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
@@ -77,7 +91,8 @@ export async function listOrders(
     .where(whereClause)
     .groupBy(orders.id)
     .orderBy(desc(orders.createdAt))
-    .limit(limit);
+    .limit(limit)
+    .offset(offset);
 
   return rows.map((row) => ({
     id: row.id,
@@ -287,6 +302,76 @@ export async function getOrderStats(): Promise<OrderStats> {
     delivered: count.delivered ?? 0,
     cancelled: count.cancelled ?? 0,
   };
+}
+
+export type AdminCustomer = {
+  phone: string;
+  fullName: string;
+  orderCount: number;
+  totalCents: number;
+  lastOrderAt: string;
+};
+
+/** Clientes (derivados de `orders`, que desnormaliza los datos de compra). */
+export async function listCustomers(): Promise<AdminCustomer[]> {
+  const db = await getDb();
+
+  const rows = await db
+    .select({
+      phone: orders.customerPhone,
+      fullName: orders.customerFullName,
+      orderCount: sql<number>`count(*)`,
+      totalCents: sql<number>`sum(${orders.totalCents})`,
+      lastOrderAt: sql<string>`max(${orders.createdAt})`,
+    })
+    .from(orders)
+    .groupBy(orders.customerPhone, orders.customerFullName)
+    .orderBy(desc(sql`max(${orders.createdAt})`))
+    .limit(200);
+
+  return rows.map((row) => ({
+    phone: row.phone,
+    fullName: row.fullName,
+    orderCount: Number(row.orderCount),
+    totalCents: Number(row.totalCents ?? 0),
+    lastOrderAt: row.lastOrderAt,
+  }));
+}
+
+export type RevenueStats = {
+  totalRevenueCents: number;
+  deliveredCount: number;
+  averageTicketCents: number;
+  /** Ingresos (centavos) por día, ordenados del más viejo al más nuevo. */
+  byDay: { date: string; cents: number }[];
+};
+
+export async function getRevenueStats(days = 7): Promise<RevenueStats> {
+  const db = await getDb();
+
+  const rows = await db
+    .select({ totalCents: orders.totalCents, createdAt: orders.createdAt })
+    .from(orders)
+    .where(eq(orders.status, "delivered"));
+
+  const totalRevenueCents = rows.reduce((sum, row) => sum + (row.totalCents ?? 0), 0);
+  const deliveredCount = rows.length;
+  const averageTicketCents =
+    deliveredCount > 0 ? Math.round(totalRevenueCents / deliveredCount) : 0;
+
+  const byDay: { date: string; cents: number }[] = [];
+  const now = Date.now();
+  for (let i = days - 1; i >= 0; i -= 1) {
+    const date = new Date(now - i * 86_400_000).toISOString().slice(0, 10);
+    byDay.push({ date, cents: 0 });
+  }
+  for (const row of rows) {
+    const date = row.createdAt.slice(0, 10);
+    const bucket = byDay.find((entry) => entry.date === date);
+    if (bucket) bucket.cents += row.totalCents ?? 0;
+  }
+
+  return { totalRevenueCents, deliveredCount, averageTicketCents, byDay };
 }
 
 export async function deleteOrder(

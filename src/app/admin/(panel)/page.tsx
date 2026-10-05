@@ -2,8 +2,9 @@ import Link from "next/link";
 
 import { AdminStatCard } from "@/components/admin/stat-card";
 import { GlassPanel } from "@/components/admin/glass-panel";
+import { RevenueChart } from "@/components/admin/revenue-chart";
 import { getCatalogStats } from "@/lib/data/admin-catalog-repository";
-import { getOrderStats } from "@/lib/data/admin-order-repository";
+import { getOrderStats, getRevenueStats } from "@/lib/data/admin-order-repository";
 import { getAdminSessionFromRequest } from "@/lib/server/admin-session";
 
 /**
@@ -17,6 +18,7 @@ export default async function AdminDashboardPage() {
   const session = await getAdminSessionFromRequest();
   const orderStats = await getOrderStats();
   const catalogStats = await getCatalogStats();
+  const revenue = await getRevenueStats(7);
 
   const sections = [
     {
@@ -83,6 +85,25 @@ export default async function AdminDashboardPage() {
           accent="bronze"
         />
       </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <AdminStatCard
+          label="Ingresos"
+          value={Math.round(revenue.totalRevenueCents / 100)}
+          detail="Pedidos entregados (MXN)"
+          delay={0.24}
+          accent="bronze"
+        />
+        <AdminStatCard
+          label="Ticket promedio"
+          value={Math.round(revenue.averageTicketCents / 100)}
+          detail="MXN por pedido entregado"
+          delay={0.32}
+          accent="bronze"
+        />
+      </div>
+
+      <RevenueChart days={revenue.byDay} />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map((section, index) => (

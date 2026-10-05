@@ -7,7 +7,7 @@ import { GlassCard } from "@/components/glass/glass-card";
 import { Reveal } from "@/components/motion/reveal";
 import { ScrollFloat } from "@/components/motion/recipes/scroll-float";
 import { buttonStyles } from "@/components/ui/button";
-import { brand, isContactConfigured } from "@/config/brand";
+import { brand } from "@/config/brand";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -43,11 +43,17 @@ type Status = { kind: "idle" } | { kind: "error"; message: string } | { kind: "d
  * Cuando la Fase 4 conecte D1, esta sección puede ganar un campo de correo y
  * guardar en la tabla `newsletter_subscribers` sin cambiar el diseño.
  */
-export function NoticeList() {
+export function NoticeList({
+  whatsapp = brand.contact.whatsapp,
+  storeName = brand.identity.name,
+}: {
+  whatsapp?: string;
+  storeName?: string;
+}) {
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
 
-  const configured = isContactConfigured();
+  const configured = whatsapp.trim().length >= 10;
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -62,14 +68,14 @@ export function NoticeList() {
     }
 
     const message = [
-      `¡Hola ${brand.identity.name}!`,
+      `¡Hola ${storeName}!`,
       "",
       "Quiero entrar a la lista de avisos de nuevos lotes.",
       `Mi teléfono es ${parsed.data}.`,
     ].join("\n");
 
     window.open(
-      `https://wa.me/${brand.contact.whatsapp}?text=${encodeURIComponent(message)}`,
+      `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`,
       "_blank",
       "noopener,noreferrer",
     );

@@ -55,6 +55,12 @@ export default async function AdminPanelLayout({ children }: { children: React.R
                 <Link href="/admin/etiquetas" className="hover:text-ink">
                   Etiquetas
                 </Link>
+                <Link href="/admin/clientes" className="hover:text-ink">
+                  Clientes
+                </Link>
+                <Link href="/admin/cupones" className="hover:text-ink">
+                  Cupones
+                </Link>
                 <Link href="/admin/ajustes" className="hover:text-ink">
                   Ajustes
                 </Link>

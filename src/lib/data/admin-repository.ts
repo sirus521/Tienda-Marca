@@ -354,3 +354,20 @@ export async function writeSettings(
       set: { value: JSON.stringify(value), updatedAt: now },
     });
 }
+
+/** Lee un único ajuste por clave y lo parsea como JSON (objeto). */
+export async function readSettingValue(key: string): Promise<Record<string, unknown> | null> {
+  const db = await getDb();
+  const rows = await db.select().from(settings).where(eq(settings.key, key)).limit(1);
+  const row = rows[0];
+  if (!row) return null;
+  try {
+    const parsed: unknown = JSON.parse(row.value);
+    if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+      return parsed as Record<string, unknown>;
+    }
+  } catch {
+    /* valor corrupto: se trata como inexistente */
+  }
+  return null;
+}

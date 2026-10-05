@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { Marquee } from "@/components/ui/marquee";
 import { brand, establishedLabel } from "@/config/brand";
+import { getBrandConfig } from "@/lib/config/brand-runtime";
 import { footerNav, mainNav } from "@/config/nav";
 import { cn } from "@/lib/utils/cn";
 
@@ -22,9 +23,10 @@ import { cn } from "@/lib/utils/cn";
  * que además Next.js prefetchea y convierte en un 404 por carga— se lee como
  * una tienda rota.
  */
-export function Footer() {
+export async function Footer() {
   const year = new Date().getFullYear();
-  const { whatsapp, email, instagram, location } = brand.contact;
+  const config = await getBrandConfig();
+  const { whatsapp, email, instagram, location } = config.contact;
   const hasWhatsApp = whatsapp.trim().length >= 10;
   const hasFooterNav = footerNav.length > 0;
 
@@ -136,7 +138,7 @@ export function Footer() {
           <p className="eyebrow">
             © {year} {brand.identity.legalName}
           </p>
-          <p className="eyebrow">Hecho en {brand.contact.location.split(",")[0] ?? "México"}</p>
+          <p className="eyebrow">Hecho en {location.split(",")[0] ?? "México"}</p>
         </div>
       </div>
     </footer>

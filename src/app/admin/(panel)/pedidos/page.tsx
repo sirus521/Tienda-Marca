@@ -27,15 +27,24 @@ const FILTERS = Object.keys(STATUS_LABELS) as (OrderStatus | "all")[];
 export default async function AdminPedidosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; error?: string }>;
+  searchParams: Promise<{ status?: string; q?: string; page?: string; error?: string }>;
 }) {
-  const { status, error } = await searchParams;
+  const { status, q, page, error } = await searchParams;
   const filter =
     typeof status === "string" && FILTERS.includes(status as OrderStatus | "all")
       ? (status as OrderStatus | "all")
       : "all";
 
-  const orders = await listOrders({ status: filter });
+  const pageSize = 20;
+  const currentPage = Math.max(1, Number(page) || 1);
+  const orders = await listOrders({
+    status: filter,
+    q,
+    limit: pageSize + 1,
+    offset: (currentPage - 1) * pageSize,
+  });
+  const hasNext = orders.length > pageSize;
+  const visibleOrders = hasNext ? orders.slice(0, pageSize) : orders;
   const stats = await getOrderStats();
 
   return (
@@ -66,7 +75,27 @@ export default async function AdminPedidosPage({
         <span>Enviados: {stats.shipped}</span>
         <span>Entregados: {stats.delivered}</span>
         <span>Cancelados: {stats.cancelled}</span>
+        <a
+          href={`/api/admin/export?resource=orders${q ? `&q=${encodeURIComponent(q)}` : ""}`}
+          className="ml-auto"
+        >
+          Exportar CSV
+        </a>
       </div>
+
+      <form method="GET" action="/admin/pedidos" className="flex gap-3 pb-8">
+        {filter !== "all" ? <input type="hidden" name="status" value={filter} /> : null}
+        <input
+          name="q"
+          defaultValue={q ?? ""}
+          placeholder="Buscar por folio, nombre o teléfono…"
+          aria-label="Buscar pedido"
+          className="w-full max-w-sm border border-line bg-transparent px-3 py-2.5 text-ink placeholder:text-ash-2"
+        />
+        <button className="border border-ink bg-ink px-4 py-2.5 font-mono text-xs tracking-[0.14em] text-bone uppercase">
+          Buscar
+        </button>
+      </form>
 
       {error ? (
         <p role="alert" className="mb-6 border border-danger px-4 py-3 text-sm text-danger">
@@ -74,11 +103,11 @@ export default async function AdminPedidosPage({
         </p>
       ) : null}
 
-      {orders.length === 0 ? (
+      {visibleOrders.length === 0 ? (
         <p className="text-ash">No hay pedidos en esta vista.</p>
       ) : (
         <div className="flex flex-col divide-y divide-line border border-line">
-          {orders.map((order) => (
+          {visibleOrders.map((order) => (
             <div
               key={order.id}
               className="flex flex-col gap-4 px-4 py-4 transition-colors hover:bg-bone sm:flex-row sm:items-center sm:justify-between"
@@ -117,6 +146,28 @@ export default async function AdminPedidosPage({
           ))}
         </div>
       )}
+
+      {currentPage > 1 || hasNext ? (
+        <div className="flex items-center gap-3 pt-6 font-mono text-[11px] tracking-[0.14em] uppercase">
+          {currentPage > 1 ? (
+            <Link
+              href={`/admin/pedidos?${filter !== "all" ? `status=${filter}&` : ""}${q ? `q=${encodeURIComponent(q)}&` : ""}page=${currentPage - 1}`}
+              className="border border-line px-3 py-1.5 text-ink hover:border-ink"
+            >
+              ← Anterior
+            </Link>
+          ) : null}
+          <span className="text-ash">Página {currentPage}</span>
+          {hasNext ? (
+            <Link
+              href={`/admin/pedidos?${filter !== "all" ? `status=${filter}&` : ""}${q ? `q=${encodeURIComponent(q)}&` : ""}page=${currentPage + 1}`}
+              className="border border-line px-3 py-1.5 text-ink hover:border-ink"
+            >
+              Siguiente →
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 }

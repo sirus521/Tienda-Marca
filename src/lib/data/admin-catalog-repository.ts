@@ -39,14 +39,25 @@ export type AdminProduct = {
   slug: string;
   status: ProductStatus;
   isFeatured: boolean;
+  category: string | null;
   variants: AdminVariant[];
 };
 
 /** Lista productos con sus variantes para la tabla del panel. */
-export async function listAdminProducts(): Promise<AdminProduct[]> {
+export async function listAdminProducts(opts: { q?: string } = {}): Promise<AdminProduct[]> {
   const db = await getDb();
 
-  const rows = await db.select().from(products).orderBy(desc(products.createdAt));
+  let rows = await db.select().from(products).orderBy(desc(products.createdAt));
+
+  if (opts.q && opts.q.trim() !== "") {
+    const needle = opts.q.trim().toLowerCase();
+    rows = rows.filter(
+      (row) =>
+        row.name.toLowerCase().includes(needle) ||
+        row.slug.toLowerCase().includes(needle) ||
+        (typeof row.category === "string" && row.category.toLowerCase().includes(needle)),
+    );
+  }
 
   if (rows.length === 0) return [];
 
@@ -83,6 +94,7 @@ export async function listAdminProducts(): Promise<AdminProduct[]> {
     slug: row.slug,
     status: row.status,
     isFeatured: row.isFeatured,
+    category: row.category ?? null,
     variants: variantsByProduct.get(row.id) ?? [],
   }));
 }

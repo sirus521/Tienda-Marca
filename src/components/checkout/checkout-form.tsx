@@ -257,6 +257,21 @@ export function CheckoutForm() {
         </div>
       </section>
 
+      {/* ---------------- Cupón ---------------- */}
+      <section className="border border-line p-4">
+        <label className="flex flex-col gap-1 text-xs text-ash">
+          Cupón
+          <input
+            name="couponCode"
+            placeholder="¿Tienes un cupón? Escríbelo aquí"
+            className="border border-line bg-transparent px-3 py-2.5 text-ink"
+          />
+        </label>
+        {state.status === "error" && state.message ? (
+          <p className="mt-2 text-xs text-danger">{state.message}</p>
+        ) : null}
+      </section>
+
       {/* ---------------- Envío ---------------- */}
       <div className="flex flex-col gap-4">
         <Button type="submit" size="lg" fullWidth disabled={isPending || !hydrated}>

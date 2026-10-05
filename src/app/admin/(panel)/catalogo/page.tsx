@@ -25,12 +25,12 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
 export default async function AdminCatalogoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ ok?: string; error?: string }>;
+  searchParams: Promise<{ ok?: string; error?: string; q?: string }>;
 }) {
-  const { ok, error } = await searchParams;
+  const { ok, error, q } = await searchParams;
   const session = await getAdminSessionFromRequest();
   const isOwner = session?.role === "owner";
-  const products = await listAdminProducts();
+  const products = await listAdminProducts({ q });
 
   return (
     <div className="flex flex-col gap-10">
@@ -53,6 +53,27 @@ export default async function AdminCatalogoPage({
           {ok}
         </p>
       ) : null}
+
+      <div className="flex flex-wrap items-center gap-3">
+        <form method="GET" action="/admin/catalogo" className="flex gap-3">
+          <input
+            name="q"
+            defaultValue={q ?? ""}
+            placeholder="Buscar por nombre, slug o categoría…"
+            aria-label="Buscar producto"
+            className="w-full max-w-sm border border-line bg-transparent px-3 py-2.5 text-ink placeholder:text-ash-2"
+          />
+          <button className="border border-ink bg-ink px-4 py-2.5 font-mono text-xs tracking-[0.14em] text-bone uppercase">
+            Buscar
+          </button>
+        </form>
+        <a
+          href={`/api/admin/export?resource=products${q ? `&q=${encodeURIComponent(q)}` : ""}`}
+          className="border border-line px-4 py-2.5 font-mono text-xs tracking-[0.14em] text-ash uppercase hover:text-ink"
+        >
+          Exportar CSV
+        </a>
+      </div>
 
       <details className="border border-line p-5">
         <summary className="cursor-pointer font-mono text-xs tracking-[0.14em] text-ash uppercase">
