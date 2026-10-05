@@ -35,8 +35,22 @@
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "tienda-ac-opennext-cache"
+    },
+    {
+      /* Fotos de producto subidas desde el admin. Bucket público: la URL de
+         cada foto se guarda como `${R2_PUBLIC_URL}/${key}` y `next/image` la
+         optimiza vía `remotePatterns`. */
+      "binding": "PRODUCT_IMAGES_R2_BUCKET",
+      "bucket_name": "ac-product-images"
     }
   ],
+
+  /* URL pública base del bucket de fotos (https://pub-<id>.r2.dev). Sustituir
+     por la que muestra `wrangler r2 bucket create ac-product-images` tras
+     hacer el bucket público. */
+  "vars": {
+    "R2_PUBLIC_URL": "https://pub-PLACEHOLDER.r2.dev"
+  },
 
   "assets": {
     "directory": ".open-next/assets",

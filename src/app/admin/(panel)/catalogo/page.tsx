@@ -1,4 +1,7 @@
+import Link from "next/link";
+
 import { listAdminProducts } from "@/lib/data/admin-catalog-repository";
+import { getAdminSessionFromRequest } from "@/lib/server/admin-session";
 import { createProductAction, updateProductStatusAction, updateVariantAction } from "./actions";
 import { DeleteProductButton } from "./delete-product-button";
 import { formatMoney } from "@/lib/domain/money";
@@ -15,9 +18,9 @@ const STATUS_LABELS: Record<ProductStatus, string> = {
 /**
  * Catálogo
  * ============================================================================
- * Fase 3. Muestra productos con sus variantes. Desde aquí se edita stock,
- * precio y estado de publicación. La creación/edición de productos completos
- * queda para una fase posterior porque toca datos más sensibles que el precio.
+ * Lista productos con sus variantes. Edición rápida de stock y precio (precio
+ * solo owner). Para editar datos, opciones, variantes e imágenes usa el botón
+ * "Editar" que abre la página de edición.
  */
 export default async function AdminCatalogoPage({
   searchParams,
@@ -25,6 +28,8 @@ export default async function AdminCatalogoPage({
   searchParams: Promise<{ ok?: string; error?: string }>;
 }) {
   const { ok, error } = await searchParams;
+  const session = await getAdminSessionFromRequest();
+  const isOwner = session?.role === "owner";
   const products = await listAdminProducts();
 
   return (
@@ -180,29 +185,40 @@ export default async function AdminCatalogoPage({
               </div>
 
               <div className="flex items-center gap-3">
-                <form action={updateProductStatusAction} className="flex items-center gap-3">
-                  <input type="hidden" name="productId" value={product.id} />
-                  <input type="hidden" name="returnTo" value="/admin/catalogo" />
-                  <select
-                    name="status"
-                    defaultValue={product.status}
-                    className="border border-line bg-transparent px-3 py-2 text-sm text-ink"
-                  >
-                    {STATUS_OPTIONS.map((status) => (
-                      <option key={status} value={status}>
-                        {STATUS_LABELS[status]}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="submit"
-                    className="border border-ink bg-ink px-3 py-2 font-mono text-[11px] tracking-[0.14em] text-bone uppercase transition-colors hover:bg-transparent hover:text-ink"
-                  >
-                    Guardar
-                  </button>
-                </form>
+                <Link
+                  href={`/admin/catalogo/${product.id}/editar`}
+                  className="border border-line px-3 py-2 font-mono text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:bg-ink hover:text-bone"
+                >
+                  Editar
+                </Link>
 
-                <DeleteProductButton productId={product.id} returnTo="/admin/catalogo" />
+                {isOwner ? (
+                  <>
+                    <form action={updateProductStatusAction} className="flex items-center gap-3">
+                      <input type="hidden" name="productId" value={product.id} />
+                      <input type="hidden" name="returnTo" value="/admin/catalogo" />
+                      <select
+                        name="status"
+                        defaultValue={product.status}
+                        className="border border-line bg-transparent px-3 py-2 text-sm text-ink"
+                      >
+                        {STATUS_OPTIONS.map((status) => (
+                          <option key={status} value={status}>
+                            {STATUS_LABELS[status]}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="submit"
+                        className="border border-ink bg-ink px-3 py-2 font-mono text-[11px] tracking-[0.14em] text-bone uppercase transition-colors hover:bg-transparent hover:text-ink"
+                      >
+                        Guardar
+                      </button>
+                    </form>
+
+                    <DeleteProductButton productId={product.id} returnTo="/admin/catalogo" />
+                  </>
+                ) : null}
               </div>
             </div>
 
@@ -240,8 +256,10 @@ export default async function AdminCatalogoPage({
                       name="price"
                       type="text"
                       defaultValue={(variant.priceCents / 100).toFixed(2)}
+                      disabled={!isOwner}
                       className="w-full border border-line bg-transparent px-2 py-1.5 text-ink"
                     />
+                    {!isOwner ? <span className="text-[10px] text-ash-2">solo owner</span> : null}
                   </label>
 
                   <div className="flex items-end">

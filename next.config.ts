@@ -38,12 +38,9 @@ const nextConfig: NextConfig = {
     /* Anchos alineados a la retícula real de la tienda (grid de 1/2/3 columnas). */
     deviceSizes: [360, 480, 640, 828, 1080, 1280, 1600, 1920, 2560],
     imageSizes: [64, 96, 128, 200, 256, 384],
-    /*
-     * Las imágenes de producto vivirán en R2 y se servirán por el CDN de
-     * Cloudflare. Cuando exista el bucket, se agrega aquí su dominio:
-     * remotePatterns: [{ protocol: "https", hostname: "img.tudominio.com" }]
-     */
-    remotePatterns: [],
+    /* Fotos de producto en R2 servidas por el CDN público de Cloudflare
+       (https://pub-<id>.r2.dev). Se admite cualquier subdominio de r2.dev. */
+    remotePatterns: [{ protocol: "https", hostname: "**.r2.dev" }],
   },
 
   async headers() {
